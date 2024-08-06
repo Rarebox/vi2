@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\Exception\AuthException;
-use Kreait\Firebase\Exception\FirebaseException;
 use Illuminate\Support\Facades\Log;
 
 class FormSubmissionController extends Controller
@@ -19,12 +17,29 @@ class FormSubmissionController extends Controller
                 ->withServiceAccount(base_path(env('FIREBASE_CREDENTIALS')))
                 ->withDatabaseUri(env('FIREBASE_DATABASE_URL'));
             $this->database = $factory->createDatabase();
-        } catch (AuthException | FirebaseException $e) {
-            Log::error('Error initializing Firebase: ' . $e->getMessage());
-            abort(500, 'Firebase initialization error');
         } catch (\Exception $e) {
             Log::error('Error initializing Firebase: ' . $e->getMessage());
-            abort(500, 'Firebase initialization error');
+        }
+    }
+
+    public function index()
+    {
+        try {
+            $forms = $this->database->getReference('forms')->getValue();
+            $formattedForms = [];
+
+            if ($forms) {
+                foreach ($forms as $key => $form) {
+                    $formattedForms[] = array_merge(['id' => $key], $form);
+                }
+            }
+
+            Log::info('Forms retrieved successfully.', ['forms' => $formattedForms]);
+
+            return view('admin.forms.index', ['forms' => $formattedForms]);
+        } catch (\Exception $e) {
+            Log::error('Error retrieving forms: ' . $e->getMessage());
+            return view('admin.forms.index', ['forms' => []]);
         }
     }
 
@@ -46,10 +61,8 @@ class FormSubmissionController extends Controller
 
         try {
             $newFormRef = $this->database->getReference('forms')->push($formData);
+            Log::info('Form submitted successfully.', ['form' => $formData, 'id' => $newFormRef->getKey()]);
             return response()->json(['message' => 'Form submitted successfully', 'id' => $newFormRef->getKey()], 201);
-        } catch (AuthException | FirebaseException $e) {
-            Log::error('Error submitting form: ' . $e->getMessage());
-            return response()->json(['message' => 'Error submitting form', 'error' => $e->getMessage()], 500);
         } catch (\Exception $e) {
             Log::error('Error submitting form: ' . $e->getMessage());
             return response()->json(['message' => 'Error submitting form', 'error' => $e->getMessage()], 500);
@@ -67,13 +80,11 @@ class FormSubmissionController extends Controller
 
         try {
             $this->database->getReference('forms/' . $id)->update(['status' => $status]);
-            return response()->json(['message' => 'Form status updated successfully'], 200);
-        } catch (AuthException | FirebaseException $e) {
-            Log::error('Error updating form status: ' . $e->getMessage());
-            return response()->json(['message' => 'Error updating form status', 'error' => $e->getMessage()], 500);
+            Log::info('Form status updated successfully.', ['id' => $id, 'status' => $status]);
+            return redirect()->back()->with('success', 'Form status updated successfully');
         } catch (\Exception $e) {
             Log::error('Error updating form status: ' . $e->getMessage());
-            return response()->json(['message' => 'Error updating form status', 'error' => $e->getMessage()], 500);
+            return redirect()->back()->with('error', 'Error updating form status');
         }
     }
 
@@ -89,10 +100,9 @@ class FormSubmissionController extends Controller
                 }
             }
 
+            Log::info('Forms retrieved successfully.', ['forms' => $formattedForms]);
+
             return response()->json($formattedForms);
-        } catch (AuthException | FirebaseException $e) {
-            Log::error('Error retrieving forms: ' . $e->getMessage());
-            return response()->json(['message' => 'Error retrieving forms', 'error' => $e->getMessage()], 500);
         } catch (\Exception $e) {
             Log::error('Error retrieving forms: ' . $e->getMessage());
             return response()->json(['message' => 'Error retrieving forms', 'error' => $e->getMessage()], 500);

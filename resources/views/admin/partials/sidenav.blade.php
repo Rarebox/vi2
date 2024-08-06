@@ -109,12 +109,12 @@
                     </a>
                     <div class="sidebar-submenu ">
                         <ul>
-                            <li class="sidebar-menu-item ">
-                            <a href="{{ route('admin.forms') }}" class="nav-link">Forms</a>
-                                    <i class="menu-icon las la-dot-circle"></i>
-                                    <span class="menu-title">@lang('All Forms')</span>
-                                </a>
-                            </li>
+                        <li class="sidebar-menu-item">
+                    <a href="{{ route('admin.forms') }}" class="nav-link">
+                        <i class="menu-icon las la-clipboard-list"></i>
+                        <span class="menu-title">Forms</span>
+                    </a>
+                </li>
                         </ul>
                     </div>
                 </li>

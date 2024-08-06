@@ -47,11 +47,9 @@ Route::middleware(['firebase','admin'])->group(function () {
     Route::get('/admin/teams/create', [TeamsController::class, 'create'])->name('admin.teams.create');
     Route::post('/admin/teams/store', [TeamsController::class, 'store'])->name('admin.teams.store');
 
-    Route::prefix('admin')->name('admin.')->group(function() {
-        Route::get('/forms', [FormSubmissionController::class, 'getForms'])->name('forms');
-        Route::post('/submit-form', [FormSubmissionController::class, 'submitForm']);
-        Route::patch('/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus']);
-    });
+    Route::get('/admin/forms', [FormSubmissionController::class, 'index'])->name('admin.forms');
+Route::post('/admin/submit-form', [FormSubmissionController::class, 'submitForm']);
+Route::patch('/admin/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus'])->name('admin.update-form-status');
 
 
 

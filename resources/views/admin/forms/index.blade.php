@@ -1,74 +1,53 @@
-@extends('layouts.admin')
+@extends('admin.layouts.app')
 
-@section('content')
-<div class="container">
-    <h1>Manage Forms</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Reservation Type</th>
-                <th>Insurance Type</th>
-                <th>Policy Number</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="formsTableBody">
-            <!-- Forms will be dynamically populated here -->
-        </tbody>
-    </table>
+@section('panel')
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-2xl font-bold mb-4">Forms Management</h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Reservation Type</th>
+                            <th>Insurance Type</th>
+                            <th>Policy Number</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($forms as $form)
+                        <tr>
+                            <td>{{ isset($form['firstName']) ? $form['firstName'] : 'N/A' }}</td>
+                            <td>{{ isset($form['lastName']) ? $form['lastName'] : 'N/A' }}</td>
+                            <td>{{ isset($form['email']) ? $form['email'] : 'N/A' }}</td>
+                            <td>{{ isset($form['date']) ? $form['date'] : 'N/A' }}</td>
+                            <td>{{ isset($form['time']) ? $form['time'] : 'N/A' }}</td>
+                            <td>{{ isset($form['reservationType']) ? $form['reservationType'] : 'N/A' }}</td>
+                            <td>{{ isset($form['insuranceType']) ? $form['insuranceType'] : 'N/A' }}</td>
+                            <td>{{ isset($form['policyNumber']) ? $form['policyNumber'] : 'N/A' }}</td>
+                            <td>
+                                <form action="{{ route('admin.update-form-status', $form['id']) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option value="open" {{ isset($form['status']) && $form['status'] == 'open' ? 'selected' : '' }}>Open</option>
+                                        <option value="closed" {{ isset($form['status']) && $form['status'] == 'closed' ? 'selected' : '' }}>Closed</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/getForms')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.getElementById('formsTableBody');
-            tableBody.innerHTML = '';
-
-            Object.keys(data).forEach(key => {
-                const form = data[key];
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${form.firstName}</td>
-                    <td>${form.lastName}</td>
-                    <td>${form.email}</td>
-                    <td>${form.date}</td>
-                    <td>${form.time}</td>
-                    <td>${form.reservationType}</td>
-                    <td>${form.insuranceType}</td>
-                    <td>${form.policyNumber}</td>
-                    <td>${form.status}</td>
-                    <td>
-                        <button onclick="updateFormStatus('${key}', 'open')">Open</button>
-                        <button onclick="updateFormStatus('${key}', 'closed')">Close</button>
-                    </td>
-                `;
-
-                tableBody.appendChild(row);
-            });
-        });
-});
-
-function updateFormStatus(id, status) {
-    fetch(`/api/updateFormStatus/${id}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ status })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        location.reload(); // Refresh the page to reflect changes
-    });
-}
-</script>
 @endsection

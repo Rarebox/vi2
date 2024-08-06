@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
-Route::post('/submit-form', [FormSubmissionController::class, 'submitForm']);
-Route::patch('/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus']);
-Route::get('/forms', [FormSubmissionController::class, 'getForms']);
+Route::get('/admin/forms', [FormSubmissionController::class, 'index'])->name('admin.forms');
+Route::post('/admin/submit-form', [FormSubmissionController::class, 'submitForm']);
+Route::patch('/admin/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus'])->name('admin.update-form-status');
 
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
 
