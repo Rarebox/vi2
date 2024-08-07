@@ -13,11 +13,7 @@
 
                 @yield('panel')
 
-
             </div><!-- bodywrapper__inner end -->
-        </div><!-- body-wrapper end -->
+        </div><!-- page-wrapper end -->
     </div>
-
-
-
 @endsection

@@ -47,9 +47,12 @@ Route::middleware(['firebase','admin'])->group(function () {
     Route::get('/admin/teams/create', [TeamsController::class, 'create'])->name('admin.teams.create');
     Route::post('/admin/teams/store', [TeamsController::class, 'store'])->name('admin.teams.store');
 
+    // routes/web.php
+
     Route::get('/admin/forms', [FormSubmissionController::class, 'index'])->name('admin.forms');
 Route::post('/admin/submit-form', [FormSubmissionController::class, 'submitForm']);
 Route::patch('/admin/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus'])->name('admin.update-form-status');
+
 
 
 

@@ -38,11 +38,10 @@ const Booking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/admin/submit-form', {
+      const response = await fetch('https://us-central1-vita--crm.cloudfunctions.net/submitForm', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       });

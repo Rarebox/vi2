@@ -21,6 +21,7 @@ Route::get('/admin/forms', [FormSubmissionController::class, 'index'])->name('ad
 Route::post('/admin/submit-form', [FormSubmissionController::class, 'submitForm']);
 Route::patch('/admin/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus'])->name('admin.update-form-status');
 
+
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
 
 Route::get('/video', [VideoController::class, 'video1'])->name('video.video1');
