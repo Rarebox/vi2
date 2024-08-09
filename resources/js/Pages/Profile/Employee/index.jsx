@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
+// import Navbar from "@/Components/Navbar";
+import Navbar from '../../../Components/NavBar/index';
 import ProfileInfo from "@/Components/Profile/Emplyee/ProfileInfo";
 import Menu from "@/Components/Profile/Emplyee/Menu";
 import styles from "./style.module.css";
@@ -12,18 +13,18 @@ import RserveForPatient from "@/Components/Profile/Emplyee/ReserveForPatient";
 import BlockDatesHours from "@/Components/Profile/Emplyee/BlockDatesHours";
 import CreatePatient from "@/Components/Profile/Emplyee/CreatePatient";  // Import the CreatePatient component
 
-const Profile = ({auth, reservations}) => {
+const Profile = ({ auth, reservations }) => {
     const tabs = [
         {
             id: "profile",
             label: "Meine Termine",
             component: <Visits reservations={reservations} />,
         },
-      //  {
+        //  {
         //    id: "quickReservations",
-          //  label: "Schnellreservierung",
-            //component: <Quicks />,
-       // },
+        //  label: "Schnellreservierung",
+        //component: <Quicks />,
+        // },
         {
             id: "accountSettings",
             label: "Account Einstellungen",

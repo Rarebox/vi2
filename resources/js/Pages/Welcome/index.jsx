@@ -3,7 +3,8 @@ import TextInput from '@/Components/TextInput';
 import axios from 'axios';
 import { useState } from 'react';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-import Navbar from '@/Components/Navbar';
+// import Navbar from '@/Components/Navbar';
+import Navbar from '../../Components/NavBar/index';
 import Banner from "@/Components/Home/Banner";
 import About from "@/Components/Home/About";
 import ChooseUs from "@/Components/Home/ChooseUs";
@@ -31,17 +32,17 @@ export default function Welcome({ auth, laravelVersion, phpVersion, employees })
     const [employeess, setEmployees] = useState([]);
 
     // const searchEmployee = (search) => {
-        // setData('search', '');
-        // axios.get(`/employees/search?search= `).then((response) => {
-        //     response.data.data.map((employee) => {
-        //         console.log(employee);
-        //     });
-        //     setEmployees(response.data.data);
-        //     console.log(response.data.data);
-        //     employeess.map((employee) => {
-        //         console.log(employee);
-        //     });
-        // });
+    // setData('search', '');
+    // axios.get(`/employees/search?search= `).then((response) => {
+    //     response.data.data.map((employee) => {
+    //         console.log(employee);
+    //     });
+    //     setEmployees(response.data.data);
+    //     console.log(response.data.data);
+    //     employeess.map((employee) => {
+    //         console.log(employee);
+    //     });
+    // });
     // }
 
     return (

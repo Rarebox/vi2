@@ -5,7 +5,8 @@ import styles from "./style.module.css";
 import FormGroup from "@/Components/FormGroup/index.jsx";
 import logo from "@/Assets/Logo.png";
 import heroImg from "@/Assets/Auth/heroImg.png";
-import Navbar from "@/Components/Navbar";
+// import Navbar from "@/Components/Navbar/index";
+import Navbar from '../../../Components/NavBar/index';
 import { IoClose } from "react-icons/io5";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
@@ -87,10 +88,10 @@ export default function Login({ status, canResetPassword }) {
                 <div className="flex flex-col justify-center items-center h-full p-8">
                     <div className="">
                         <div className="mb-4 text-sm text-gray-600">
-                        Passwort vergessen? Kein Problem. Geben Sie uns einfach Ihre
-                E-Mail-Adresse an und wir senden Ihnen einen Link zum
-                Zurücksetzen des Passworts, mit dem Sie ein neues auswählen
-                können.
+                            Passwort vergessen? Kein Problem. Geben Sie uns einfach Ihre
+                            E-Mail-Adresse an und wir senden Ihnen einen Link zum
+                            Zurücksetzen des Passworts, mit dem Sie ein neues auswählen
+                            können.
                         </div>
 
                         {status && (
@@ -123,7 +124,7 @@ export default function Login({ status, canResetPassword }) {
 
                                     disabled={processing}
                                 >
-                    Link senden
+                                    Link senden
                                 </PrimaryButton >
                             </div>
                         </form>
@@ -226,7 +227,7 @@ export default function Login({ status, canResetPassword }) {
                                     </span>
                                 </div>
                                 <InputError message={errors.password} />
-{/* 
+                                {/*
                                 <div className={styles.container}>
                                     <label
                                         htmlFor="a"
@@ -311,9 +312,9 @@ export default function Login({ status, canResetPassword }) {
                                     </Link>
                                 </p>
                                 <p
-                                 style={{
-                                    color: "rgba(212, 170, 44, 1)",
-                                }}
+                                    style={{
+                                        color: "rgba(212, 170, 44, 1)",
+                                    }}
                                     className={`${styles.forgetPasswordText} flex justify-center cursor-pointer text-sm `}
                                     onClick={showForgotPasswordModal}
                                 >
