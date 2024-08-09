@@ -3,9 +3,6 @@
 declare(strict_types=1);
 
 return [
-
-    'credentials' => env('FIREBASE_CREDENTIALS'),
-    'database_url' => env('FIREBASE_DATABASE_URL'),
     /*
      * ------------------------------------------------------------------------
      * Default Firebase project

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Navbar from "@/Components/Navbar";
+// import Navbar from "@/Components/Navbar";
+import Navbar from '../../../Components/NavBar/index';
 import ProfileInfo from "@/Components/Profile/Patient/ProfileInfo";
 import Menu from "@/Components/Profile/Patient/Menu";
 import styles from "./style.module.css";

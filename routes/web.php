@@ -1,26 +1,16 @@
 <?php
 
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SiteController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\VideoController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\ReservationController;
-use App\Http\Controllers\VideoController;
-use App\Http\Controllers\DoctorController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\FormSubmissionController;
-
-use Illuminate\Support\Facades\Session;
-use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-
-Route::get('/admin/forms', [FormSubmissionController::class, 'index'])->name('admin.forms');
-Route::post('/admin/submit-form', [FormSubmissionController::class, 'submitForm']);
-Route::patch('/admin/update-form-status/{id}', [FormSubmissionController::class, 'updateFormStatus'])->name('admin.update-form-status');
-
 
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
 
@@ -40,20 +30,15 @@ Route::get('/reservation', function () {
 // Route::get('/employees/{tab}', [DoctorController::class, 'doctorList'])->name('doctor.doctorList');
 // Route::get('/employees/{uid}', [DoctorController::class, 'show'])->name('doctor.show');
 
-
 // Route::get('/employees', function () {
 //     return Inertia::render('DoctorList/index');
 // });
 
 Route::get('/Reservierung', function () {
-    return Inertia::render('Booking'); // Booking.jsx dosyasını çağıracak
-})->name('reservierung');
-
-
-
+    return Inertia::render('Booking');
+});
 
 Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
-
 
 Route::get('/employee/get_days/{uid}/{type}', [EmployeeController::class, 'get_days'])->name('employee.get_days');
 Route::get('/employee/get_blocked_hours/{uid}', [EmployeeController::class, 'get_blocked_hours'])->name('employee.get_blocked_hours');
@@ -64,13 +49,12 @@ Route::get('/reservation/get_hours/', [ReservationController::class, 'get_hours'
 
 Route::post('/reservation/quick/', [ReservationController::class, 'quick'])->name('reservation.quick');
 
-
 // Route::middleware('auth')->group(function () {
 Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
 
     // Route::middleware('employee')->group(function () {
-        Route::get('/reservation/accept/{key}', [ReservationController::class, 'accept'])->name('reservation.accept');
-        Route::get('/reservation/decline/{key}', [ReservationController::class, 'decline'])->name('reservation.decline');
+    Route::get('/reservation/accept/{key}', [ReservationController::class, 'accept'])->name('reservation.accept');
+    Route::get('/reservation/decline/{key}', [ReservationController::class, 'decline'])->name('reservation.decline');
     // });
 
     // Route::post('/cancel/{key}', [ReservationController::class, 'cancel'])->name('reservation.cancel');
@@ -87,7 +71,6 @@ Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
     Route::post('/update_profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('/update_employee_info', [ProfileController::class, 'update_employee_info'])->name('profile.update_employee');
 
-
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/visit/{key}', [ProfileController::class, 'visit'])->name('visit');
 
@@ -96,24 +79,20 @@ Route::middleware(['firebase', 'firebaseVerified'])->group(function () {
     Route::post('/quick/accept', [ProfileController::class, 'quick_accept'])->name('quick.accept');
 
     // Route::middleware('patient')->group(function () {
-        Route::get('/reservation/create', [ReservationController::class, 'create'])->name('reservation.create');
-        Route::get('/reservation/session', function( Request $request) {
-            return $request->session()->get('reservation');
-        })->name('reservation.session');
-        Route::post('/reservation/store', [ReservationController::class, 'store'])->name('reservation.store');
+    Route::get('/reservation/create', [ReservationController::class, 'create'])->name('reservation.create');
+    Route::get('/reservation/session', function (Request $request) {
+        return $request->session()->get('reservation');
+    })->name('reservation.session');
+    Route::post('/reservation/store', [ReservationController::class, 'store'])->name('reservation.store');
 
-
-        Route::post('/reservation/quick/store', [ReservationController::class, 'quick_store'])->name('reservation.quick_store');
+    Route::post('/reservation/quick/store', [ReservationController::class, 'quick_store'])->name('reservation.quick_store');
     // });
-
-
-
 
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
 
-
     // reserveforpatien
     Route::post('/reserveforpatient', [ReservationController::class, 'reserveforpatient'])->name('reserveforpatient');
+    Route::post('create/patient', [PatientController::class, 'store'])->name('create.patient');
 
     Route::post('/profile/blockhours', [ProfileController::class, 'blockhours'])->name('blockhours');
 

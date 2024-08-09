@@ -2,17 +2,13 @@
 
 namespace App\Mail;
 
+use App\Http\Facades\Auth;
+use App\Http\Facades\Database;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Http\Facades\Database;
-use App\Http\Facades\Auth;
-
-
-use function Laravel\Prompts\text;
 
 class ReservationBookedPatient extends Mailable
 {
@@ -24,15 +20,14 @@ class ReservationBookedPatient extends Mailable
 
     protected $user;
 
-
     protected $employee;
+
     /**
      * Create a new message instance.
      */
-
-
     public function __construct($reservation, $user, $employee)
     {
+
         // $this->reservation_key = $reservation_key;
         // $this->reservation = Database::getOneWhere('reservations', 'reservation_key', $reservation_key);
         // $this->user = Auth::getUserData();
@@ -57,6 +52,7 @@ class ReservationBookedPatient extends Mailable
             'employee' => $this->employee,
         ]);
     }
+
     /**
      * Get the message envelope.
      */

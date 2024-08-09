@@ -1,8 +1,8 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import TextInput from "@/Components/TextInput";
 // import axios from "axios";
-import NavBar from "@/Components/Navbar";
-
+// import NavBar from "@/Components/Navbar";
+import NavBar from '../../Components/NavBar/index';
 import NavBar2 from "@/Components/NavBar2";
 import Hashtag from "@/Components/NewAppointment/Hashtags";
 import QuickAppointmentRequest from "@/Components/NewAppointment/QuickAppointmentRequest";
@@ -135,7 +135,7 @@ export default function Employee({ auth, dates, employee, type }) {
 
 
     const getBlockedHours = () => {
-        axios.get('/employee/get_blocked_hours/'+employee.uid).then((response) => {
+        axios.get('/employee/get_blocked_hours/' + employee.uid).then((response) => {
             setBlockedHours(response.data);
             // Object.entries(response.data).map(([date, hours]) => {
             //     hours.map((hour) => {
@@ -216,34 +216,34 @@ export default function Employee({ auth, dates, employee, type }) {
             <Head title="Welcome" />
 
             <div className={`${styles.container} `}>
-            <div
-                        className="items-center mx-auto max-w-[1000px] p-2    "
-                    >
-                        <div className="flex md:flex-row flex-col min-h-[380px] ">
-                            <div className="flex-1 md:w-1/2 w-full bg-white     border-r-[1px] shadow-md  ">
-                                {/* employee details start */}
-                                <div className="flex flex-row gap-6 p-4 ">
-                                    <img
-                                        className="rounded-full w-[100px] h-[100px] object-cover"
-                                        src={
+                <div
+                    className="items-center mx-auto max-w-[1000px] p-2    "
+                >
+                    <div className="flex md:flex-row flex-col min-h-[380px] ">
+                        <div className="flex-1 md:w-1/2 w-full bg-white     border-r-[1px] shadow-md  ">
+                            {/* employee details start */}
+                            <div className="flex flex-row gap-6 p-4 ">
+                                <img
+                                    className="rounded-full w-[100px] h-[100px] object-cover"
+                                    src={
+                                        employee.profile_image
+                                            ? "/images/" +
                                             employee.profile_image
-                                                ? "/images/" +
-                                                  employee.profile_image
-                                                : logo
-                                        }
-                                        alt=""
-                                    />
+                                            : logo
+                                    }
+                                    alt=""
+                                />
 
-                                    <div className="flex flex-col gap-1">
-                                        <h3 className="font-medium text-xl leading-6 ">
-                                            {employee.username} {employee.name}
-                                        </h3>
+                                <div className="flex flex-col gap-1">
+                                    <h3 className="font-medium text-xl leading-6 ">
+                                        {employee.username} {employee.name}
+                                    </h3>
 
-                                        <h4 className="font-normal text-base  ">
-                                            Internist, Allgemeinmediziner
-                                            (Hausarzt), Hausarzt
-                                        </h4>
-                                        {/* <div className="flex gap-[1px]">
+                                    <h4 className="font-normal text-base  ">
+                                        Internist, Allgemeinmediziner
+                                        (Hausarzt), Hausarzt
+                                    </h4>
+                                    {/* <div className="flex gap-[1px]">
                                             <IoIosStarOutline className="text-[#c7982e]" />
                                             <IoIosStarOutline className="text-[#c7982e]" />
                                             <IoIosStarOutline className="text-[#c7982e]" />
@@ -253,333 +253,88 @@ export default function Employee({ auth, dates, employee, type }) {
                                                 87 Bewertungen
                                             </span>
                                         </div> */}
-                                    </div>
-                                </div>
-
-                                {/* employee details end */}
-                                <div className="p-6  relative">
-                                    {/* tabs start */}
-
-                                    <ul className="flex border-b-[1px] gap-6">
-                                  
-                                        <li
-                                            onClick={() => handleActivaTab('online')}
-                                            className={`tab-item relative pb-3 cursor-pointer
-                                              ${
-                                                activeTab ===
-                                                "online"
-                                                    ? "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#627282]"
-                                                    : "text-[#627282]"
-                                            }`}
-                                        >
-                                            <div
-                                                className="flex gap-1 items-center   "
-                                            >
-                                                <IoIosVideocam />
-                                                Videosprechstunde{" "}
-                                            </div>
-                                        </li>
-                                        <li
-                                            onClick={() => handleActivaTab('onsite')}
-                                            className={`tab-item relative pb-3 cursor-pointer
-                                            ${
-                                                activeTab ===
-                                                "onsite"
-                                                    ? "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#627282]"
-                                                    : "text-[#627282]"
-                                            }`}
-                                        >
-                                            <div  className=" ">
-                                                Vor-Ort-Termin{" "}
-                                            </div>
-                                        </li>
-
-                                    </ul>
-
-                                    <div className="tab-content">
-                                        {activeTab === "onsite" ? (
-                                            <div className="pt-5 flex gap-2">
-                                                <HiMapPin className="h-5 w-5 text-[#8c8a9a]" />
-                                                <div className="flex flex-col gap-1">
-                                                    <span>
-                                                        Karl-Marx-Str. 27,
-                                                        Berlin
-                                                    </span>
-                                                    <span className=" text-[#627282] text-sm ">
-                                                        Praxis Dr.med. Usan
-                                                        Thanabalasingam Facharzt
-                                                        für Innere Medizin und
-                                                        Kardiologie
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="pt-5"></div>
-                                        )}
-                                    </div>
                                 </div>
                             </div>
-                            <div className="flex-1 md:w-1/2 w-full bg-white shadow-md ">
-                                {activeTab === "onsite" ? (
-                                    <>
-                                        <div className="px-12 pt-6">
-                                            <button
-                                                className={
-                                                    styles.submitBtnQuick
-                                                }
-                                                onClick={getFirstAvailable}
-                                            >
-                                                Nächstmöglicher Termin
-                                            </button>
 
+                            {/* employee details end */}
+                            <div className="p-6  relative">
+                                {/* tabs start */}
 
-                                            {/* <QuickAppointmentRequest employeeUID={employee.uid} quickDate={employee.quick_date} quickHour={employee.quick_hour} /> */}
+                                <ul className="flex border-b-[1px] gap-6">
+
+                                    <li
+                                        onClick={() => handleActivaTab('online')}
+                                        className={`tab-item relative pb-3 cursor-pointer
+                                              ${activeTab ===
+                                                "online"
+                                                ? "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#627282]"
+                                                : "text-[#627282]"
+                                            }`}
+                                    >
+                                        <div
+                                            className="flex gap-1 items-center   "
+                                        >
+                                            <IoIosVideocam />
+                                            Videosprechstunde{" "}
                                         </div>
-                                        <div>
-                                            {/* dates */}
-                                            <div
-                                                className={`${styles.dateSelectContainer} `}
-                                            >
-                                                <div
-                                                    className={`${styles.dateSelect}  `}
-                                                >
-                                                    <button
-                                                        className={`${styles.scrollBtn} left ${styles.inactive}`}
-                                                        onClick={() =>
-                                                            scroll(
-                                                                "left",
-                                                                employee.uid
-                                                            )
-                                                        }
-                                                    >
-                                                        <FiChevronLeft className="text-white" />
-                                                    </button>
-                                                    <div
-                                                        className={`${styles.dateBoxContainer} border-b-[1px] pb-3 `}
-                                                        ref={(el) =>
-                                                            (scrollRefs.current[
-                                                                employee.uid
-                                                            ] = el)
-                                                        }
-                                                    >
-                                                        {
-                                                            blockedHours  && (
-                                                        showMore
-                                                            ? dates.map(
-                                                                  (
-                                                                      date
-                                                                  ) => {
-                                                                    console.log(blockedHours[date.date]);
-                                                                      return (
-                                                                          <div
-                                                                              className="flex flex-col gap-8"
-                                                                          >
-                                                                              <div
-                                                                                  className={
-                                                                                      styles.dateBox
-                                                                                  }
-                                                                              >
-                                                                                  <h6
-                                                                                      className={
-                                                                                          styles.dateBoxTitle
-                                                                                      }
-                                                                                  >
-                                                                                      {
-                                                                                          date.day
-                                                                                      }
-                                                                                  </h6>
+                                    </li>
+                                    <li
+                                        onClick={() => handleActivaTab('onsite')}
+                                        className={`tab-item relative pb-3 cursor-pointer
+                                            ${activeTab ===
+                                                "onsite"
+                                                ? "after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px] after:bg-[#627282]"
+                                                : "text-[#627282]"
+                                            }`}
+                                    >
+                                        <div className=" ">
+                                            Vor-Ort-Termin{" "}
+                                        </div>
+                                    </li>
 
-                                                                                  <p
-                                                                                      className={
-                                                                                          styles.dateBoxDayInfo
-                                                                                      }
-                                                                                  >
-                                                                                      {date.weekday}
-                                                                                  </p>
-                                                                              </div>
+                                </ul>
 
-                                                                              <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
-                                                                                  {hours.map(
-                                                                                      (
-                                                                                          hour
-                                                                                      ) => (
-                                                                                        console.log(blockedHours[date.date]),
-                                                                                        // check if the hour in blockedHours[date] array
-                                                                                        blockedHours[date] && blockedHours[date].includes(hour) ? (
-
-                                                                                            <button>blockec</button>) : (
-
-                                                                                                <button
-                                                                                                className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
-                                                                                                "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
-                                                                                                }
-                                                                                                data-date={date.date}
-                                                                                                data-hour={hour}
-                                                                                                onClick={(e) => {selectHour(e)}}
-                                                                                                disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
-                                                                                            >
-                                                                                                {
-                                                                                                    hour
-                                                                                                }
-                                                                                            </button>
-                                                                                          )
-                                                                                      )
-                                                                                  )}
-                                                                              </div>
-                                                                          </div>
-                                                                      );
-                                                                  }
-                                                              )
-                                                            : dates.map(
-                                                                  (
-                                                                      date
-                                                                  ) => {
-                                                                    console.log(blockedHours[date.date]);
-                                                                      return (
-                                                                          <div
-                                                                              className="flex flex-col gap-8"
-                                                                          >
-                                                                              <div
-                                                                                  className={
-                                                                                      styles.dateBox
-                                                                                  }
-                                                                              >
-                                                                                  <h6
-                                                                                      className={
-                                                                                          styles.dateBoxTitle
-                                                                                      }
-                                                                                  >
-                                                                                      {
-                                                                                          date.day
-                                                                                      }
-                                                                                  </h6>
-
-                                                                                  <p
-                                                                                      className={
-                                                                                          styles.dateBoxDayInfo
-                                                                                      }
-                                                                                  >
-                                                                                      {date.weekday}
-                                                                                  </p>
-                                                                              </div>
-
-                                                                              <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
-                                                                                  {hours
-                                                                                      .slice(
-                                                                                          0,
-                                                                                          5
-                                                                                      )
-                                                                                      .map(
-                                                                                          (
-                                                                                              hour
-                                                                                          ) => (
-                                                                                            console.log(blockedHours[date.date]),
-
-                                                                                            blockedHours[date] && blockedHours[date].includes(hour) ?  (
-
-                                                                                                <button>blockec</button>) : (
-
-                                                                                                    <button
-
-                                                                                                    className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d]  text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
-                                                                                                    "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
-                                                                                                    }                                                                                                    data-date={date.date}
-                                                                                                data-hour={hour}
-                                                                                                onClick={(e) => {selectHour(e)}}
-                                                                                                disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
-                                                                                                >
-                                                                                                    {
-                                                                                                        hour
-                                                                                                    }
-                                                                                                </button>
-                                                                                              )
-                                                                                          )
-                                                                                      )}
-                                                                              </div>
-                                                                          </div>
-                                                                      );
-                                                                  }
-                                                              ) )
-                                                        }
-                                                    </div>
-                                                    <button
-                                                        className={`${styles.scrollBtn} right`}
-                                                        onClick={() =>
-                                                            scroll(
-                                                                "right",
-                                                                employee.uid
-                                                            )
-                                                        }
-                                                    >
-                                                        <FiChevronRight className="text-white" />
-                                                    </button>
-                                                </div>
-
-                                                <button
-                                                    onClick={() => setShowMore(!showMore)}
-                                                    className=" text-[#c7982e] mb-6 flex gap-2 items-center justify-center "
-                                                >
-                                                    {showMore ? (
-                                                        <>
-                                                            {" "}
-                                                            <span>
-                                                                Weniger anzeigen{" "}
-                                                            </span>{" "}
-                                                            <FiChevronUp className="h-5 w-5" />{" "}
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            {" "}
-                                                            <span>
-                                                                Mehr
-                                                                Sprechzeiten
-                                                                anzeigen
-                                                            </span>{" "}
-                                                            <FiChevronDown className="h-5 w-5" />{" "}
-                                                        </>
-                                                    )}
-                                                </button>
+                                <div className="tab-content">
+                                    {activeTab === "onsite" ? (
+                                        <div className="pt-5 flex gap-2">
+                                            <HiMapPin className="h-5 w-5 text-[#8c8a9a]" />
+                                            <div className="flex flex-col gap-1">
+                                                <span>
+                                                    Karl-Marx-Str. 27,
+                                                    Berlin
+                                                </span>
+                                                <span className=" text-[#627282] text-sm ">
+                                                    Praxis Dr.med. Usan
+                                                    Thanabalasingam Facharzt
+                                                    für Innere Medizin und
+                                                    Kardiologie
+                                                </span>
                                             </div>
                                         </div>
-
-                                        <div className="px-12 pb-6">
-                                            <button
-                                                className={
-                                                    styles.submitBtnQuick
-                                                }
-                                                onClick={submit}
-                                            >
-                                                Termin vereinbaren
-                                            </button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <div>
-                                        {/* dates */}
-
-                                        <div className="px-12 pt-6">
-                                            {/* <button
-                                                className={
-                                                    styles.submitBtnQuick
-                                                }
-                                            >
-                                                Nächstmöglicher Termin
-                                            </button> */}
-                                            <div className="px-12 pt-6">
-                                            <button
-                                                className={
-                                                    styles.submitBtnQuick
-                                                }
-                                                onClick={getFirstAvailable}
-                                            >
-                                                Nächstmöglicher Termin
-                                            </button>
+                                    ) : (
+                                        <div className="pt-5"></div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex-1 md:w-1/2 w-full bg-white shadow-md ">
+                            {activeTab === "onsite" ? (
+                                <>
+                                    <div className="px-12 pt-6">
+                                        <button
+                                            className={
+                                                styles.submitBtnQuick
+                                            }
+                                            onClick={getFirstAvailable}
+                                        >
+                                            Nächstmöglicher Termin
+                                        </button>
 
 
                                         {/* <QuickAppointmentRequest employeeUID={employee.uid} quickDate={employee.quick_date} quickHour={employee.quick_hour} /> */}
-                                        </div>
-                                        </div>
-
+                                    </div>
+                                    <div>
+                                        {/* dates */}
                                         <div
                                             className={`${styles.dateSelectContainer} `}
                                         >
@@ -600,144 +355,149 @@ export default function Employee({ auth, dates, employee, type }) {
                                                 <div
                                                     className={`${styles.dateBoxContainer} border-b-[1px] pb-3 `}
                                                     ref={(el) =>
-                                                        (scrollRefs.current[
-                                                            employee.uid
-                                                        ] = el)
+                                                    (scrollRefs.current[
+                                                        employee.uid
+                                                    ] = el)
                                                     }
                                                 >
                                                     {
-                                                    blockedHours &&  (
-                                                    showMore
-                                                        ? dates.map(
-                                                              (date) => {
-                                                                console.log(blockedHours[date.date]);
-                                                                  return (
-                                                                      <div
-                                                                          className="flex flex-col gap-8"
-                                                                      >
-                                                                          <div
-                                                                              className={
-                                                                                  styles.dateBox
-                                                                              }
-                                                                          >
-                                                                              <h6
-                                                                                  className={
-                                                                                      styles.dateBoxTitle
-                                                                                  }
-                                                                              >
-                                                                                  {
-                                                                                      date.day
-                                                                                  }
-                                                                              </h6>
+                                                        blockedHours && (
+                                                            showMore
+                                                                ? dates.map(
+                                                                    (
+                                                                        date
+                                                                    ) => {
+                                                                        console.log(blockedHours[date.date]);
+                                                                        return (
+                                                                            <div
+                                                                                className="flex flex-col gap-8"
+                                                                            >
+                                                                                <div
+                                                                                    className={
+                                                                                        styles.dateBox
+                                                                                    }
+                                                                                >
+                                                                                    <h6
+                                                                                        className={
+                                                                                            styles.dateBoxTitle
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            date.day
+                                                                                        }
+                                                                                    </h6>
 
-                                                                              <p
-                                                                                  className={
-                                                                                      styles.dateBoxDayInfo
-                                                                                  }
-                                                                              >
-                                                                                  {date.weekday}
-                                                                              </p>
-                                                                          </div>
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.dateBoxDayInfo
+                                                                                        }
+                                                                                    >
+                                                                                        {date.weekday}
+                                                                                    </p>
+                                                                                </div>
 
-                                                                          <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
-                                                                              {hours2.map(
-                                                                                  (
-                                                                                      hour
-                                                                                  ) => (
-                                                                                    console.log(blockedHours[date.date]),
-
-                                                                                        blockedHours[date] && blockedHours[date].includes(hour) ?  (
-
-                                                                                            <button>blockec</button>) : (
-
-                                                                                                <button
-
-                                                                                                className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d]  text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
-                                                                                                "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
-                                                                                                }                                                                                                data-date={date.date}
-                                                                                                data-hour={hour}
-                                                                                                onClick={(e) => {selectHour(e)}}
-                                                                                                disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
-                                                                                            >
-                                                                                                {
-                                                                                                    hour
-                                                                                                }
-                                                                                            </button>
-                                                                                          )
-                                                                                  )
-                                                                              )}
-                                                                          </div>
-                                                                      </div>
-                                                                  );
-                                                              }
-                                                          )
-                                                        : dates.map(
-                                                              (date) => {
-                                                              console.log(blockedHours[date.date]);
-                                                                  return (
-                                                                      <div
-                                                                          className="flex flex-col gap-8"
-                                                                      >
-                                                                          <div
-                                                                              className={
-                                                                                  styles.dateBox
-                                                                              }
-                                                                          >
-                                                                              <h6
-                                                                                  className={
-                                                                                      styles.dateBoxTitle
-                                                                                  }
-                                                                              >
-                                                                                  {
-                                                                                      date.day
-                                                                                  }
-                                                                              </h6>
-
-                                                                              <p
-                                                                                  className={
-                                                                                      styles.dateBoxDayInfo
-                                                                                  }
-                                                                              >
-                                                                                {date.weekday}
-                                                                              </p>
-                                                                          </div>
-
-                                                                          <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
-                                                                              {hours2
-                                                                                  .slice(
-                                                                                      0,
-                                                                                      5
-                                                                                  )
-                                                                                  .map(
-                                                                                      (
-                                                                                          hour
-                                                                                      ) => (
-
-                                                                                            blockedHours[date] && blockedHours[date].includes(hour) ?  (
+                                                                                <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
+                                                                                    {hours.map(
+                                                                                        (
+                                                                                            hour
+                                                                                        ) => (
+                                                                                            console.log(blockedHours[date.date]),
+                                                                                            // check if the hour in blockedHours[date] array
+                                                                                            blockedHours[date] && blockedHours[date].includes(hour) ? (
 
                                                                                                 <button>blockec</button>) : (
 
-                                                                                                    <button
-
-                                                                                                    className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d]  text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
-                                                                                                    "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
-                                                                                                    }                                                                                                    data-date={date.date}
-                                                                                                data-hour={hour}
-                                                                                                onClick={(e) => {selectHour(e)}}
-                                                                                                disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
+                                                                                                <button
+                                                                                                    className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
+                                                                                                        "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
+                                                                                                    }
+                                                                                                    data-date={date.date}
+                                                                                                    data-hour={hour}
+                                                                                                    onClick={(e) => { selectHour(e) }}
+                                                                                                    disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
                                                                                                 >
                                                                                                     {
                                                                                                         hour
                                                                                                     }
                                                                                                 </button>
-                                                                                              )
-                                                                                      )
-                                                                                  )}
-                                                                          </div>
-                                                                      </div>
-                                                                  );
-                                                              }
-                                                          ) )
+                                                                                            )
+                                                                                        )
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+                                                                        );
+                                                                    }
+                                                                )
+                                                                : dates.map(
+                                                                    (
+                                                                        date
+                                                                    ) => {
+                                                                        console.log(blockedHours[date.date]);
+                                                                        return (
+                                                                            <div
+                                                                                className="flex flex-col gap-8"
+                                                                            >
+                                                                                <div
+                                                                                    className={
+                                                                                        styles.dateBox
+                                                                                    }
+                                                                                >
+                                                                                    <h6
+                                                                                        className={
+                                                                                            styles.dateBoxTitle
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            date.day
+                                                                                        }
+                                                                                    </h6>
+
+                                                                                    <p
+                                                                                        className={
+                                                                                            styles.dateBoxDayInfo
+                                                                                        }
+                                                                                    >
+                                                                                        {date.weekday}
+                                                                                    </p>
+                                                                                </div>
+
+                                                                                <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
+                                                                                    {hours
+                                                                                        .slice(
+                                                                                            0,
+                                                                                            5
+                                                                                        )
+                                                                                        .map(
+                                                                                            (
+                                                                                                hour
+                                                                                            ) => (
+                                                                                                console.log(blockedHours[date.date]),
+
+                                                                                                blockedHours[date] && blockedHours[date].includes(hour) ? (
+
+                                                                                                    <button>blockec</button>) : (
+
+                                                                                                    <button
+
+                                                                                                        className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d]  text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
+                                                                                                            "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
+                                                                                                        } data-date={date.date}
+                                                                                                        data-hour={hour}
+                                                                                                        onClick={(e) => { selectHour(e) }}
+                                                                                                        disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
+                                                                                                    >
+                                                                                                        {
+                                                                                                            hour
+                                                                                                        }
+                                                                                                    </button>
+                                                                                                )
+                                                                                            )
+                                                                                        )}
+                                                                                </div>
+                                                                            </div>
+                                                                        );
+                                                                    }
+                                                                ))
                                                     }
                                                 </div>
                                                 <button
@@ -769,7 +529,8 @@ export default function Employee({ auth, dates, employee, type }) {
                                                     <>
                                                         {" "}
                                                         <span>
-                                                            Mehr Sprechzeiten
+                                                            Mehr
+                                                            Sprechzeiten
                                                             anzeigen
                                                         </span>{" "}
                                                         <FiChevronDown className="h-5 w-5" />{" "}
@@ -777,23 +538,260 @@ export default function Employee({ auth, dates, employee, type }) {
                                                 )}
                                             </button>
                                         </div>
+                                    </div>
 
-                                        <div className=" px-12 pb-6">
+                                    <div className="px-12 pb-6">
+                                        <button
+                                            className={
+                                                styles.submitBtnQuick
+                                            }
+                                            onClick={submit}
+                                        >
+                                            Termin vereinbaren
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <div>
+                                    {/* dates */}
+
+                                    <div className="px-12 pt-6">
+                                        {/* <button
+                                                className={
+                                                    styles.submitBtnQuick
+                                                }
+                                            >
+                                                Nächstmöglicher Termin
+                                            </button> */}
+                                        <div className="px-12 pt-6">
                                             <button
                                                 className={
                                                     styles.submitBtnQuick
                                                 }
-                                                onClick={submit}
-
+                                                onClick={getFirstAvailable}
                                             >
-                                                Termin vereinbaren
+                                                Nächstmöglicher Termin
                                             </button>
+
+
+                                            {/* <QuickAppointmentRequest employeeUID={employee.uid} quickDate={employee.quick_date} quickHour={employee.quick_hour} /> */}
                                         </div>
                                     </div>
-                                )}
-                            </div>
+
+                                    <div
+                                        className={`${styles.dateSelectContainer} `}
+                                    >
+                                        <div
+                                            className={`${styles.dateSelect}  `}
+                                        >
+                                            <button
+                                                className={`${styles.scrollBtn} left ${styles.inactive}`}
+                                                onClick={() =>
+                                                    scroll(
+                                                        "left",
+                                                        employee.uid
+                                                    )
+                                                }
+                                            >
+                                                <FiChevronLeft className="text-white" />
+                                            </button>
+                                            <div
+                                                className={`${styles.dateBoxContainer} border-b-[1px] pb-3 `}
+                                                ref={(el) =>
+                                                (scrollRefs.current[
+                                                    employee.uid
+                                                ] = el)
+                                                }
+                                            >
+                                                {
+                                                    blockedHours && (
+                                                        showMore
+                                                            ? dates.map(
+                                                                (date) => {
+                                                                    console.log(blockedHours[date.date]);
+                                                                    return (
+                                                                        <div
+                                                                            className="flex flex-col gap-8"
+                                                                        >
+                                                                            <div
+                                                                                className={
+                                                                                    styles.dateBox
+                                                                                }
+                                                                            >
+                                                                                <h6
+                                                                                    className={
+                                                                                        styles.dateBoxTitle
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        date.day
+                                                                                    }
+                                                                                </h6>
+
+                                                                                <p
+                                                                                    className={
+                                                                                        styles.dateBoxDayInfo
+                                                                                    }
+                                                                                >
+                                                                                    {date.weekday}
+                                                                                </p>
+                                                                            </div>
+
+                                                                            <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
+                                                                                {hours2.map(
+                                                                                    (
+                                                                                        hour
+                                                                                    ) => (
+                                                                                        console.log(blockedHours[date.date]),
+
+                                                                                        blockedHours[date] && blockedHours[date].includes(hour) ? (
+
+                                                                                            <button>blockec</button>) : (
+
+                                                                                            <button
+
+                                                                                                className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d]  text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
+                                                                                                    "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
+                                                                                                } data-date={date.date}
+                                                                                                data-hour={hour}
+                                                                                                onClick={(e) => { selectHour(e) }}
+                                                                                                disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
+                                                                                            >
+                                                                                                {
+                                                                                                    hour
+                                                                                                }
+                                                                                            </button>
+                                                                                        )
+                                                                                    )
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                }
+                                                            )
+                                                            : dates.map(
+                                                                (date) => {
+                                                                    console.log(blockedHours[date.date]);
+                                                                    return (
+                                                                        <div
+                                                                            className="flex flex-col gap-8"
+                                                                        >
+                                                                            <div
+                                                                                className={
+                                                                                    styles.dateBox
+                                                                                }
+                                                                            >
+                                                                                <h6
+                                                                                    className={
+                                                                                        styles.dateBoxTitle
+                                                                                    }
+                                                                                >
+                                                                                    {
+                                                                                        date.day
+                                                                                    }
+                                                                                </h6>
+
+                                                                                <p
+                                                                                    className={
+                                                                                        styles.dateBoxDayInfo
+                                                                                    }
+                                                                                >
+                                                                                    {date.weekday}
+                                                                                </p>
+                                                                            </div>
+
+                                                                            <div className="flex flex-col items-center justify-center gap-2 min-w-[100px]">
+                                                                                {hours2
+                                                                                    .slice(
+                                                                                        0,
+                                                                                        5
+                                                                                    )
+                                                                                    .map(
+                                                                                        (
+                                                                                            hour
+                                                                                        ) => (
+
+                                                                                            blockedHours[date] && blockedHours[date].includes(hour) ? (
+
+                                                                                                <button>blockec</button>) : (
+
+                                                                                                <button
+
+                                                                                                    className={blockedHours[date.date] && blockedHours[date.date].includes(hour) ? "border-2 border-transparent text-[#c7982e] bg-[#c99b314d]  text-base font-semibold px-3 py-1 rounded-md disabled bg-gray-300 cursor-not-allowed timeBox" :
+                                                                                                        "border-2 border-transparent text-[#c7982e] bg-[#c99b314d] hover:border-[#c7982e] text-base font-semibold px-3 py-1 rounded-md timeBox"
+                                                                                                    } data-date={date.date}
+                                                                                                    data-hour={hour}
+                                                                                                    onClick={(e) => { selectHour(e) }}
+                                                                                                    disabled={blockedHours[date.date] && blockedHours[date.date].includes(hour)}
+                                                                                                >
+                                                                                                    {
+                                                                                                        hour
+                                                                                                    }
+                                                                                                </button>
+                                                                                            )
+                                                                                        )
+                                                                                    )}
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                }
+                                                            ))
+                                                }
+                                            </div>
+                                            <button
+                                                className={`${styles.scrollBtn} right`}
+                                                onClick={() =>
+                                                    scroll(
+                                                        "right",
+                                                        employee.uid
+                                                    )
+                                                }
+                                            >
+                                                <FiChevronRight className="text-white" />
+                                            </button>
+                                        </div>
+
+                                        <button
+                                            onClick={() => setShowMore(!showMore)}
+                                            className=" text-[#c7982e] mb-6 flex gap-2 items-center justify-center "
+                                        >
+                                            {showMore ? (
+                                                <>
+                                                    {" "}
+                                                    <span>
+                                                        Weniger anzeigen{" "}
+                                                    </span>{" "}
+                                                    <FiChevronUp className="h-5 w-5" />{" "}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {" "}
+                                                    <span>
+                                                        Mehr Sprechzeiten
+                                                        anzeigen
+                                                    </span>{" "}
+                                                    <FiChevronDown className="h-5 w-5" />{" "}
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+
+                                    <div className=" px-12 pb-6">
+                                        <button
+                                            className={
+                                                styles.submitBtnQuick
+                                            }
+                                            onClick={submit}
+
+                                        >
+                                            Termin vereinbaren
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
+                </div>
                 <Footer />
             </div>
         </>

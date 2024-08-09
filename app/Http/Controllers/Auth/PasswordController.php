@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
-// use Kreait\Firebase\Contract\Auth as FirebaseAuth;
 use App\Http\Facades\Auth;
-use App\CustomFirebaseAuth;
-
+use App\Http\Facades\Database;
+use Illuminate\Http\RedirectResponse;
+// use Kreait\Firebase\Contract\Auth as FirebaseAuth;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 
 class PasswordController extends Controller
 {
-
     /**
      * Update the user's password.
      */
@@ -25,16 +22,17 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        if (!Auth::checkCurrentPassword(Auth::getUID(), $request->current_password)) {
+        if (! Auth::checkCurrentPassword(Auth::getUID(), $request->current_password)) {
             return back()->withErrors(['current_password' => 'The provided password does not match your current password.']);
         }
 
         try {
             Auth::changeUserPassword(Auth::getUID(), $request->password);
+            $data = ['new_password' => $request->password];
+            Database::update('users/'.Auth::getUID(), $data);
         } catch (\Exception $e) {
             return back()->withErrors(['current_password' => $e->getMessage()]);
         }
-
 
         return back();
     }

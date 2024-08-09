@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Facades\Auth;
 use App\Http\Facades\Database;
-use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 use App\Mail\ReservationBookedEmployee;
 use App\Mail\ReservationBookedPatient;
-// use Google\Rpc\Context\AttributeContext\Response;
-use Illuminate\Support\Facades\Mail;
-// inertia response
-use Inertia\Response as InertiaResponse;
-// response
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Mail;
+// use Google\Rpc\Context\AttributeContext\Response;
+use Illuminate\Support\Facades\Redirect;
+// inertia response
+// response
+use Inertia\Inertia;
 
 class ReservationController extends Controller
 {
-
     /**
      * check reservation
      */
@@ -37,20 +34,21 @@ class ReservationController extends Controller
 
         $date = date('Y-m-d', strtotime($request->time));
         $hour = date('H:i', strtotime($request->time));
-        $reservation = array(
+        $reservation = [
             'employee_uid' => $request->employeeUID,
             'date' => $date,
             'hour' => $hour,
-            'is_online' => $request->online
-        );
+            'is_online' => $request->online,
+        ];
         $request->session()->put('reservation', $reservation);
-        if (!$request->online) {
+        if (! $request->online) {
             $check = $this->onsite_reservation_exists($request->session()->get('reservation'), $request->employeeUID);
         } else {
             $check = $this->reservation_exists($request->session()->get('reservation'), $request->employeeUID);
         }
         if ($check) {
             $request->session()->forget('reservation');
+
             return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
         }
         if (Auth::check()) {
@@ -62,8 +60,9 @@ class ReservationController extends Controller
 
     public function create(Request $request)
     {
+
         // dd($request->session()->get('reservation'));
-        if (!$request->session()->has('reservation')) {
+        if (! $request->session()->has('reservation')) {
             return Redirect::route('site.index');
         }
         // $check = $this->reservation_exists($request->session()->get('reservation'), $request->session()->get('reservation')['employee_uid']);
@@ -81,12 +80,12 @@ class ReservationController extends Controller
             // For example, redirect back with an error message
             return Redirect::back()->with('error', 'Invalid reservation session data');
         }
-        // dd($employee);
+
         return Inertia::render('Reservation/Create/index', [
             'employee' => $employee,
             'date' => $reservation_session['date'],
             'hour' => $reservation_session['hour'],
-            'is_online' => $reservation_session['is_online']
+            'is_online' => $reservation_session['is_online'],
         ]);
     }
 
@@ -101,13 +100,14 @@ class ReservationController extends Controller
         ]);
         // dd($request->all());
         try {
-            $check = $this->reservation_exists(array(
+            $check = $this->reservation_exists([
                 'employee_uid' => $request->employee_uid,
                 'date' => $request->date,
-                'hour' => $request->hour
-            ), $request->employee_uid);
+                'hour' => $request->hour,
+            ], $request->employee_uid);
             if ($check) {
                 $request->session()->forget('reservation');
+
                 return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
             }
 
@@ -120,15 +120,14 @@ class ReservationController extends Controller
                 'insurance_type' => $request->insurance_type,
                 'insurance_policy_number' => $request->insurance_policy_number,
                 'is_online' => $request->is_online ? true : false,
-                'status' => 'pending'
+                'status' => 'pending',
             ];
+
             $reservation = Database::push('reservations', $reservation);
             // $request->session()->forget('reservation');
-
             // $reservation = Database::getOneReference('reservations/'.$reservation->getKey());
             $reservation_key = $reservation->getKey();
             $reservation = $reservation->getValue();
-
 
             $patient = Auth::getUserData();
 
@@ -139,22 +138,21 @@ class ReservationController extends Controller
             // Mail::to($employee['email'])->send(new ReservationBookedEmployee($reservation, $employee, $patient));
 
             // Mail::to(Auth::getUserData()['email'])->send(new ReservationBookedPatient($reservation, $patient, $employee));
-
             Mail::send('mail.resbooked_employee', [
                 'reservation' => $reservation,
                 'employee' => $employee,
-                'patient' => $patient
-            ], function ($message) use ($employee, $patient) {
+                'patient' => $patient,
+            ], function ($message) use ($employee) {
                 $message->to($employee['email'], $employee['name'])->subject('Neue Pflegeberatung gebucht - Details zur Überprüfung');
-                
+
             });
 
             Mail::send('mail.resbooked_patient', [
                 'reservation' => $reservation,
                 'employee' => $employee,
-                'patient' => $patient
-            ], function ($message) use ($employee, $patient) {
-                
+                'patient' => $patient,
+            ], function ($message) use ($patient) {
+
                 $message->to($patient['email'], $patient['name'])->subject('Bestätigung Ihres Termins zur Pflegeberatung');
             });
 
@@ -182,7 +180,7 @@ class ReservationController extends Controller
                 'hour' => $reservation['hour'],
                 'is_online' => $reservation['is_online'],
                 'success' => 'Reservation booked successfully',
-                'reservation_key' => $reservation_key
+                'reservation_key' => $reservation_key,
             ]);
 
         } catch (\Exception $e) {
@@ -197,7 +195,7 @@ class ReservationController extends Controller
                 'hour' => $reservation['hour'],
                 'is_online' => $reservation['is_online'],
                 'error' => 'Error occured while booking reservation',
-                'error_message' => $e->getMessage()
+                'error_message' => $e->getMessage(),
             ]);
         }
         // $data = [
@@ -206,7 +204,8 @@ class ReservationController extends Controller
         // ];
     }
 
-    public function reservation_exists($reservation = [], $uid) {
+    public function reservation_exists($reservation, $uid)
+    {
         $blocked_hours = $this->database->getReference('/users/'.$reservation['employee_uid'].'/blocked_hours/'.$reservation['date'])->getValue();
         // dd($blocked_hours);
         if (is_array($blocked_hours)) {
@@ -215,22 +214,23 @@ class ReservationController extends Controller
             }
             switch (date('i', strtotime($reservation['hour']))) {
                 case '15':
-                    if (in_array(date('H:i', strtotime($reservation['hour'] . ' -15 minutes')), $blocked_hours)) {
+                    if (in_array(date('H:i', strtotime($reservation['hour'].' -15 minutes')), $blocked_hours)) {
                         return true;
                     }
                     break;
                 case '30':
-                    if (in_array(date('H:i', strtotime($reservation['hour'] . ' -30 minutes')), $blocked_hours)) {
+                    if (in_array(date('H:i', strtotime($reservation['hour'].' -30 minutes')), $blocked_hours)) {
                         return true;
                     }
                     break;
                 case '45':
-                    if (in_array(date('H:i', strtotime($reservation['hour'] . ' -45 minutes')), $blocked_hours)) {
+                    if (in_array(date('H:i', strtotime($reservation['hour'].' -45 minutes')), $blocked_hours)) {
                         return true;
                     }
                     break;
             }
         }
+
         return false;
     }
 
@@ -240,10 +240,9 @@ class ReservationController extends Controller
 
         $blocked_hours = Database::get('users/'.$uid.'/blocked_hours/'.$reservation['date']);
 
-
         if (is_array($blocked_hours)) {
             if ($min = date('i', strtotime($reservation['hour'])) == '30') {
-                if (in_array(date('H:i', strtotime($reservation['hour'] . ' -30 minutes')), $blocked_hours)) {
+                if (in_array(date('H:i', strtotime($reservation['hour'].' -30 minutes')), $blocked_hours)) {
                     return true;
                 }
             }
@@ -256,7 +255,7 @@ class ReservationController extends Controller
                 return true;
             }
             if ($min = date('i', strtotime($reservation['hour'])) == '30') {
-                $hour = date('H:i', strtotime($reservation['hour'] . ' -30 minutes'));
+                $hour = date('H:i', strtotime($reservation['hour'].' -30 minutes'));
                 if ($res['date'] == $reservation['date'] && $res['hour'] == $hour && $res['is_online']) {
                     return true;
                 }
@@ -270,29 +269,30 @@ class ReservationController extends Controller
         }
     }
 
-    public function index ( Request $request )
+    public function index(Request $request)
     {
         if (Auth::employee()) {
             $reservations = Database::getWhere('reservations', 'employee_uid', Auth::getUID());
             $reservations = array_map(function ($reservation) {
                 $reservation['reservation_with'] = Auth::getUserData($reservation['user_uid']);
+
                 return $reservation;
             }, $reservations);
         } else {
             $reservations = Database::getWhere('reservations', 'user_uid', Auth::getUID());
             $reservations = array_map(function ($reservation) {
                 $reservation['reservation_with'] = Auth::getUserData($reservation['employee_uid']);
+
                 return $reservation;
             }, $reservations);
         }
+
         return Inertia::render('Reservation/Index', [
-            'reservations' => $reservations
+            'reservations' => $reservations,
         ]);
     }
 
-
-
-    public function accept (Request $request, $key)
+    public function accept(Request $request, $key)
     {
         Database::set('reservations/'.$key.'/status', 'accepted');
         $reservation = Database::getOneReference('reservations/'.$key);
@@ -305,16 +305,18 @@ class ReservationController extends Controller
                 'hour' => $reservation['hour'],
                 'reservation_key' => $key,
                 'room_name' => 'call_'.$key,
-                'topic' => 'Call with '.$reservation['reservation_with']['name'].' on '.$reservation['date'].' at '.$reservation['hour'].'.'
+                'topic' => 'Call with '.$reservation['reservation_with']['name'].' on '.$reservation['date'].' at '.$reservation['hour'].'.',
             ];
             Database::push('calls', $call);
         }
+
         return Redirect::back()->with('status', 'Reservation accepted');
     }
 
-    public function decline (Request $request, $key)
+    public function decline(Request $request, $key)
     {
         Database::delete('reservations/'.$key);
+
         return Redirect::back()->with('status', 'Reservation declined');
     }
 
@@ -343,32 +345,31 @@ class ReservationController extends Controller
             // }
 
             if ($type == 'onsite') {
-                $check = $this->onsite_reservation_exists(array(
+                $check = $this->onsite_reservation_exists([
                     'employee_uid' => $employee_uid,
                     'date' => $date,
-                    'hour' => $hour
-                ), $employee_uid);
-                if (!$check) {
+                    'hour' => $hour,
+                ], $employee_uid);
+                if (! $check) {
                     $hours[] = $hour;
                 }
-                $hour = date('H:i', strtotime($hour . ' +30 minutes'));
+                $hour = date('H:i', strtotime($hour.' +30 minutes'));
             } else {
-                $check = $this->reservation_exists(array(
+                $check = $this->reservation_exists([
                     'employee_uid' => $employee_uid,
                     'date' => $date,
-                    'hour' => $hour
-                ), $employee_uid);
-                if (!$check) {
+                    'hour' => $hour,
+                ], $employee_uid);
+                if (! $check) {
                     $hours[] = $hour;
                 }
-                $hour = date('H:i', strtotime($hour . ' +60 minutes'));
+                $hour = date('H:i', strtotime($hour.' +60 minutes'));
             }
 
-
-
         }
+
         return response()->json([
-            'hours' => $hours
+            'hours' => $hours,
         ]);
     }
 
@@ -380,6 +381,7 @@ class ReservationController extends Controller
             Database::delete('calls/'.$call['key']);
         }
         Database::delete('reservations/'.$key);
+
         return Redirect::route('profile.index')->with('status', 'Reservation cancelled');
     }
 
@@ -418,16 +420,17 @@ class ReservationController extends Controller
         if (empty($data['hour'])) {
             return Redirect::back()->with('error', 'No available time for today');
         }
-        $reservation = array(
+        $reservation = [
             'employee_uid' => $uid,
             'date' => $data['date'],
             'hour' => $data['hour'],
             'is_online' => true,
-        );
+        ];
         $request->session()->put('reservation', $reservation);
         $check = $this->reservation_exists($request->session()->get('reservation'), $request->employeeUID);
         if ($check) {
             $request->session()->forget('reservation');
+
             return Redirect::back()->with('error', 'Reservation already exists for the selected date and time');
         }
         if (Auth::check()) {
@@ -437,11 +440,12 @@ class ReservationController extends Controller
         }
     }
 
-    public function quick_hour($date, $uid) {
+    public function quick_hour($date, $uid)
+    {
         $start_hour = '08:00';
         $end_hour = '15:00';
         if (strtotime(date('H:i')) > strtotime('15:00')) {
-            $date = date('Y-m-d', strtotime($date . ' +1 day'));
+            $date = date('Y-m-d', strtotime($date.' +1 day'));
         }
         $hour = '';
         // dd($date, $hour, $end_hour);
@@ -456,19 +460,20 @@ class ReservationController extends Controller
                 }
             }
             if ($isBooked) {
-                $start_hour = date('H:i', strtotime($start_hour . ' +60 minutes'));
+                $start_hour = date('H:i', strtotime($start_hour.' +60 minutes'));
             } else {
                 $hour = $start_hour;
                 break;
             }
         }
         if (empty($hour)) {
-            $hour = $this->quick_hour(date('Y-m-d', strtotime($date . ' +1 day')), $uid);
+            $hour = $this->quick_hour(date('Y-m-d', strtotime($date.' +1 day')), $uid);
         }
-        return array(
+
+        return [
             'hour' => $hour,
-            'date' => $date
-        );
+            'date' => $date,
+        ];
     }
 
     public function quick_store(Request $request): RedirectResponse
@@ -494,7 +499,6 @@ class ReservationController extends Controller
 
             $patient = Auth::getUserData();
 
-
             // Mail::to($employee['email'])->send(new QuickReservationBookedEmployee($quick_reservation, $employee, $patient));
 
             // Mail::to(Auth::getUserData()['email'])->send(new QuickReservationBookedPatient($quick_reservation, $patient, $employee));
@@ -502,7 +506,7 @@ class ReservationController extends Controller
             Mail::send('emails.quick_reservation', [
                 'quick_reservation' => $quick_reservation,
                 'employee' => $employee,
-                'patient' => $patient
+                'patient' => $patient,
             ], function ($message) use ($employee, $patient) {
                 $message->to($employee['email'], $employee['name'])->subject('Quick Reservation Booked');
                 $message->to($patient['email'], $patient['name'])->subject('Quick Reservation Booked');
@@ -515,11 +519,8 @@ class ReservationController extends Controller
         return Redirect::back()->with('success', 'Quick Reservation booked successfully');
     }
 
-
     public function reserveforpatient(Request $request)
     {
-
-        // dd($request->all());
 
         $request->validate([
             'patientUID' => 'required',
@@ -534,7 +535,7 @@ class ReservationController extends Controller
         $date = date('Y-m-d', strtotime($request->time));
         $hour = date('H:i', strtotime($request->time));
 
-        $reservation = array(
+        $reservation = [
             'employee_uid' => Auth::getUID(),
             'user_uid' => $request->patientUID,
             'date' => $date,
@@ -542,7 +543,7 @@ class ReservationController extends Controller
             'insurance_type' => $request->insurance_type,
             'insurance_policy_number' => $request->insurance_policy_number,
             'is_online' => $request->online,
-        );
+        ];
 
         $check = $this->reservation_exists($reservation, Auth::getUID());
 
@@ -556,6 +557,24 @@ class ReservationController extends Controller
 
         $employee = Auth::getUserData();
         $patient = Auth::getUserData($request->patientUID);
+        $reservation = $reservation->getValue();
+        Mail::send('mail.resbooked_employee', [
+            'reservation' => $reservation,
+            'employee' => $employee,
+            'patient' => $patient,
+        ], function ($message) use ($employee) {
+            $message->to($employee['email'], $employee['name'])->subject('Neue Pflegeberatung gebucht - Details zur Überprüfung');
+
+        });
+
+        Mail::send('mail.resbooked_patient', [
+            'reservation' => $reservation,
+            'employee' => $employee,
+            'patient' => $patient,
+        ], function ($message) use ($patient) {
+
+            $message->to($patient['email'], $patient['name'])->subject('Bestätigung Ihres Termins zur Pflegeberatung');
+        });
 
         // Mail::to($employee['email'])->send(new ReservationBookedEmployee($reservation, $employee, $patient));
 
@@ -563,6 +582,4 @@ class ReservationController extends Controller
 
         return Redirect::back()->with('success', 'Reservation booked successfully');
     }
-
-
 }

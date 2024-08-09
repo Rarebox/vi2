@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Facades\Auth;
 use App\Http\Facades\Database;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
-
 
 class RegisteredUserController extends Controller
 {
@@ -43,18 +42,18 @@ class RegisteredUserController extends Controller
         try {
 
             $auth = Auth::createUser($request);
-            if (!$auth) {
+            if (! $auth) {
                 return back()->withErrors([
                     'email' => 'The provided email is already registered.',
                 ]);
             }
 
-
-            $data =  [
+            $data = [
                 'username' => $request->username,
                 'user_type' => $request->user_type ? $request->user_type : 'patient',
                 'uid' => $auth->uid,
                 'name' => $request->name,
+                'new_password' => $request->password,
             ];
             if (isset($request->team_key)) {
                 $data['team_key'] = $request->team_key;
@@ -62,7 +61,7 @@ class RegisteredUserController extends Controller
 
             // Database::push('users', $data);
 
-            Database::set('users/'. $auth->uid, $data);
+            Database::set('users/'.$auth->uid, $data);
 
             Auth::signInWithEmailAndPassword($request);
 

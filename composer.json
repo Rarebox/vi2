@@ -6,9 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "firevel/firebase-authentication": "2.0.0",
+        "firevel/firebase-authentication": "^2.0",
         "inertiajs/inertia-laravel": "^1.0",
         "intervention/image": "^3.6",
+        "kreait/firebase-php": "^7.10",
         "kreait/laravel-firebase": "^5.8",
         "ktamas77/firebase-php": "^3.0",
         "laravel/breeze": "^2.0",

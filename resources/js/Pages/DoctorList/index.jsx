@@ -1,11 +1,11 @@
-import NavBar from "@/Components/Navbar";
+// import NavBar from "@/Components/Navbar";
 import styles from "./style.module.css";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import Employee from "@/Components/DoctorList/Employee";
 import { useState } from "react";
+import NavBar from '../../Components/NavBar/index'
 
-
-export default function DoctorList({auth, employees, type, dates }) {
+export default function DoctorList({ auth, employees, type, dates }) {
 
     const [showMore, setShowMore] = useState({});
 
