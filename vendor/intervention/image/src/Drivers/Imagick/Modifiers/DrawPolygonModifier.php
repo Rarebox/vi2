@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Intervention\Image\Drivers\Imagick\Modifiers;
 
 use ImagickDraw;
-use ImagickPixel;
 use RuntimeException;
 use Intervention\Image\Interfaces\ImageInterface;
 use Intervention\Image\Interfaces\SpecializedInterface;
@@ -19,7 +18,6 @@ class DrawPolygonModifier extends GenericDrawPolygonModifier implements Speciali
     public function apply(ImageInterface $image): ImageInterface
     {
         $drawing = new ImagickDraw();
-        $drawing->setFillColor(new ImagickPixel('transparent')); // defaults to no backgroundColor
 
         if ($this->drawable->hasBackgroundColor()) {
             $background_color = $this->driver()->colorProcessor($image->colorspace())->colorToNative(

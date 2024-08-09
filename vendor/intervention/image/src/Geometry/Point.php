@@ -22,9 +22,9 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets X coordinate
      *
-     * @see PointInterface::setX()
+     * @param int $x
      */
     public function setX(int $x): self
     {
@@ -34,9 +34,9 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get X coordinate
      *
-     * @see PointInterface::x()
+     * @return int
      */
     public function x(): int
     {
@@ -44,9 +44,9 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Sets Y coordinate
      *
-     * @see PointInterface::setY()
+     * @param int $y
      */
     public function setY(int $y): self
     {
@@ -56,9 +56,9 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get Y coordinate
      *
-     * @see PointInterface::y()
+     * @return int
      */
     public function y(): int
     {
@@ -66,9 +66,9 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Move X coordinate
      *
-     * @see PointInterface::moveX()
+     * @param int $value
      */
     public function moveX(int $value): self
     {
@@ -78,9 +78,9 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Move Y coordinate
      *
-     * @see PointInterface::moveY()
+     * @param int $value
      */
     public function moveY(int $value): self
     {
@@ -89,20 +89,17 @@ class Point implements PointInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @see PointInterface::move()
-     */
     public function move(int $x, int $y): self
     {
         return $this->moveX($x)->moveY($y);
     }
 
     /**
-     * {@inheritdoc}
+     * Sets both X and Y coordinate
      *
-     * @see PointInterface::setPosition()
+     * @param int $x
+     * @param int $y
+     * @return Point
      */
     public function setPosition(int $x, int $y): self
     {
@@ -113,9 +110,11 @@ class Point implements PointInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Rotate point ccw around pivot
      *
-     * @see PointInterface::rotate()
+     * @param float $angle
+     * @param PointInterface $pivot
+     * @return Point
      */
     public function rotate(float $angle, PointInterface $pivot): self
     {

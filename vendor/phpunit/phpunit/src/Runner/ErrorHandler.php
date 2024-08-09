@@ -27,6 +27,7 @@ use const E_USER_WARNING;
 use const E_WARNING;
 use function array_keys;
 use function array_values;
+use function assert;
 use function debug_backtrace;
 use function error_reporting;
 use function restore_error_handler;
@@ -43,8 +44,6 @@ use PHPUnit\TextUI\Configuration\SourceFilter;
 use PHPUnit\Util\ExcludeList;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class ErrorHandler
@@ -59,7 +58,7 @@ final class ErrorHandler
     private readonly SourceFilter $sourceFilter;
 
     /**
-     * @var array{functions: list<non-empty-string>, methods: list<array{className: class-string, methodName: non-empty-string}>}
+     * @psalm-var array{functions: list<non-empty-string>, methods: list<array{className: class-string, methodName: non-empty-string}>}
      */
     private ?array $deprecationTriggers = null;
 
@@ -226,7 +225,7 @@ final class ErrorHandler
     }
 
     /**
-     * @param array{functions: list<non-empty-string>, methods: list<array{className: class-string, methodName: non-empty-string}>} $deprecationTriggers
+     * @psalm-param array{functions: list<non-empty-string>, methods: list<array{className: class-string, methodName: non-empty-string}>} $deprecationTriggers
      */
     public function useDeprecationTriggers(array $deprecationTriggers): void
     {
@@ -234,9 +233,9 @@ final class ErrorHandler
     }
 
     /**
-     * @param non-empty-string $file
-     * @param positive-int     $line
-     * @param non-empty-string $description
+     * @psalm-param non-empty-string $file
+     * @psalm-param positive-int $line
+     * @psalm-param non-empty-string $description
      */
     private function ignoredByBaseline(string $file, int $line, string $description): bool
     {
@@ -255,18 +254,19 @@ final class ErrorHandler
 
         $trace = $this->filteredStackTrace($filterTrigger);
 
+        assert(isset($trace[0]['file']));
+        assert(isset($trace[1]['file']));
+
         $triggeredInFirstPartyCode       = false;
         $triggerCalledFromFirstPartyCode = false;
 
-        if (isset($trace[0]['file']) &&
-            ($trace[0]['file'] === $test->file() ||
-            $this->sourceFilter->includes($this->source, $trace[0]['file']))) {
+        if ($trace[0]['file'] === $test->file() ||
+            $this->sourceFilter->includes($this->source, $trace[0]['file'])) {
             $triggeredInFirstPartyCode = true;
         }
 
-        if (isset($trace[1]['file']) &&
-            ($trace[1]['file'] === $test->file() ||
-            $this->sourceFilter->includes($this->source, $trace[1]['file']))) {
+        if ($trace[1]['file'] === $test->file() ||
+            $this->sourceFilter->includes($this->source, $trace[1]['file'])) {
             $triggerCalledFromFirstPartyCode = true;
         }
 
@@ -281,9 +281,6 @@ final class ErrorHandler
         return IssueTrigger::indirect();
     }
 
-    /**
-     * @return list<array{file: string, line: int, class: string, function: string, type: string}>
-     */
     private function filteredStackTrace(bool $filterDeprecationTriggers): array
     {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
@@ -309,7 +306,6 @@ final class ErrorHandler
             foreach ($this->deprecationTriggers['methods'] as $method) {
                 if (isset($trace[$frame]['class']) &&
                     $trace[$frame]['class'] === $method['className'] &&
-                    /** @phpstan-ignore isset.offset */
                     isset($trace[$frame]['function']) &&
                     $trace[$frame]['function'] === $method['methodName']) {
                     unset($trace[$frame]);

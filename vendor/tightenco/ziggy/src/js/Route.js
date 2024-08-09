@@ -116,8 +116,6 @@ export default class Route {
 
         if (!segments.length) return this.template;
 
-        // This should probably be refactored to build the host and path separately (not the entire URL at once)
-        // because that's how Laravel does it internally and it's more precise and less error-prone
         return this.template
             .replace(/{([^}?]+)(\??)}/g, (_, segment, optional) => {
                 // If the parameter is missing but is not optional, throw an error
@@ -134,7 +132,7 @@ export default class Route {
                         ).test(params[segment] ?? '')
                     ) {
                         throw new Error(
-                            `Ziggy error: '${segment}' parameter '${params[segment]}' does not match required format '${this.wheres[segment]}' for route '${this.name}'.`,
+                            `Ziggy error: '${segment}' parameter does not match required format '${this.wheres[segment]}' for route '${this.name}'.`,
                         );
                     }
                 }
@@ -144,7 +142,7 @@ export default class Route {
                     .replace(/%25/g, '%')
                     .replace(/\$/g, '%24');
             })
-            .replace(this.config.absolute ? /(\.[^/]+?)(\/\/)/ : /(^)(\/\/)/, '$1/')
+            .replace(`${this.origin}//`, `${this.origin}/`)
             .replace(/\/+$/, '');
     }
 }

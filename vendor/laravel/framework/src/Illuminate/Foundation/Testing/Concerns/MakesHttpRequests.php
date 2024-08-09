@@ -64,6 +64,13 @@ trait MakesHttpRequests
     protected $withCredentials = false;
 
     /**
+     * The latest test response (if any).
+     *
+     * @var \Illuminate\Testing\TestResponse|null
+     */
+    public static $latestResponse;
+
+    /**
      * Define additional headers to be sent with the request.
      *
      * @param  array  $headers
@@ -86,19 +93,6 @@ trait MakesHttpRequests
     public function withHeader(string $name, string $value)
     {
         $this->defaultHeaders[$name] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Remove a header from the request.
-     *
-     * @param  string  $name
-     * @return $this
-     */
-    public function withoutHeader(string $name)
-    {
-        unset($this->defaultHeaders[$name]);
 
         return $this;
     }
@@ -134,7 +128,9 @@ trait MakesHttpRequests
      */
     public function withoutToken()
     {
-        return $this->withoutHeader('Authorization');
+        unset($this->defaultHeaders['Authorization']);
+
+        return $this;
     }
 
     /**
@@ -596,7 +592,7 @@ trait MakesHttpRequests
             $response = $this->followRedirects($response);
         }
 
-        return $this->createTestResponse($response, $request);
+        return static::$latestResponse = $this->createTestResponse($response, $request);
     }
 
     /**

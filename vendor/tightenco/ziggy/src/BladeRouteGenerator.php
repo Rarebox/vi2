@@ -23,15 +23,18 @@ class BladeRouteGenerator
 
         $output = config('ziggy.output.script', Script::class);
 
-        $routeFunction = config('ziggy.skip-route-function') ? '' : file_get_contents(__DIR__ . '/../dist/route.umd.js');
-
-        return (string) new $output($ziggy, $routeFunction, $nonce);
+        return (string) new $output($ziggy, $this->getRouteFunction(), $nonce);
     }
 
-    private function generateMergeJavascript(Ziggy $ziggy, string $nonce)
+    private function generateMergeJavascript(Ziggy $ziggy, $nonce)
     {
         $output = config('ziggy.output.merge_script', MergeScript::class);
 
         return new $output($ziggy, $nonce);
+    }
+
+    private function getRouteFunction()
+    {
+        return config('ziggy.skip-route-function') ? '' : file_get_contents(__DIR__ . '/../dist/route.umd.js');
     }
 }

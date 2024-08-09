@@ -11,7 +11,7 @@
                             <img src="" alt="@lang('Profile Image')" class="b-radius--10 w-100">
                         </div>
                         <div class="mt-15">
-                            <h4 class="">{{ $user->name }}</h4>
+                            <h4 class="">{{$user->name}}</h4>
                             <span class="text--small">@lang('Joined At') <strong></strong></span>
                         </div>
                     </div>
@@ -25,15 +25,14 @@
 
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('Name')
-                            <span class="font-weight-bold">{{ $user->username }}</span>
+                            <span class="font-weight-bold">{{$user->username}}</span>
                         </li>
 
 
 
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             @lang('User Type')
-                            <span
-                                class="font-weight-bold">{{ $user->user_type == 'employee' ? 'Employee' : 'Patient' }}</span>
+                            <span class="font-weight-bold">{{ $user->user_type== 'employee' ? 'Employee' : 'Patient' }}</span>
                         </li>
                     </ul>
                 </div>
@@ -43,7 +42,7 @@
                     <h5 class="mb-20 text-muted">@lang('User action')</h5>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <form action="{{ route('admin.users.delete', $user->uid) }}" method="POST">
+                            <form action="{{route('admin.users.delete', $user->uid)}}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn--danger btn-block">@lang('Delete')</button>
                             </form>
@@ -58,7 +57,7 @@
             <div class="row mb-none-30">
                 <div class="col-xl-3 col-lg-6 col-sm-6 mb-30">
                     <div class="dashboard-w1 bg--18 b-radius--10 box-shadow has--link">
-                        <a href="{{ route('admin.users.reservations', $user->uid) }}" class="item--link"></a>
+                        <a href="{{route('admin.users.reservations', $user->uid)}}" class="item--link"></a>
                         <div class="icon">
                             <i class="las la-shopping-cart"></i>
                         </div>
@@ -76,27 +75,24 @@
 
             <div class="card mt-50">
                 <div class="card-body">
-                    <h5 class="card-title border-bottom pb-2">@lang('Information of') {{ $user->name }}</h5>
+                    <h5 class="card-title border-bottom pb-2">@lang('Information of') {{$user->name}}</h5>
 
-                    <form action="{{ route('admin.users.update', [$user->uid]) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form action="{{route('admin.users.update',[$user->uid])}}" method="POST"
+                          enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Surname')<span
-                                            class="text-danger">*</span></label>
-                                    <input class="form-control" type="text" name="name" value="{{ $user->name }}">
+                                    <label class="form-control-label font-weight-bold">@lang('Surname')<span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" name="name" value="{{$user->name}}">
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-control-label  font-weight-bold">@lang('Name') <span
-                                            class="text-danger">*</span></label>
-                                    <input class="form-control" type="text" name="username"
-                                        value="{{ $user->username }}">
+                                    <label class="form-control-label  font-weight-bold">@lang('Name') <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="text" name="username" value="{{$user->username}}">
                                 </div>
                             </div>
                         </div>
@@ -104,44 +100,23 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Email') <span
-                                            class="text-danger">*</span></label>
-                                    <input class="form-control" type="email" name="email" value="{{ $user->email }}">
+                                    <label class="form-control-label font-weight-bold">@lang('Email') <span class="text-danger">*</span></label>
+                                    <input class="form-control" type="email" name="email" value="{{$user->email}}">
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group ">
-                                    <label class="form-control-label font-weight-bold">@lang('Password')</label>
-                                    <input class="form-control" type="text" name="password"
-                                        value="{{ $user->new_password ?? '' }}">
-                                </div>
-                            </div>
                         </div>
-
-                        <div class="row">
-                            <div class="form-group col-xl-4 col-md-6 col-sm-3 col-12">
-                                <label class="form-control-label font-weight-bold">@lang('Admin')</label>
-                                <input type="checkbox" data-width="100%" data-onstyle="-success" data-offstyle="-danger"
-                                    data-toggle="toggle" data-on="@lang('Yes')" data-off="@lang('No')"
-                                    name="is_admin" @if (isset($user->is_admin) && $user->is_admin) checked @endif>
-                            </div>
-                        </div>
-
 
                         <!-- select from teams -->
                         @if ($user->user_type == 'employee')
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label font-weight-bold">@lang('Team') <span
-                                                class="text-danger">*</span></label>
+                                        <label class="form-control-label font-weight-bold">@lang('Team') <span class="text-danger">*</span></label>
                                         <select class="form-control" name="team_key">
                                             <option value="">@lang('Select Team')</option>
-                                            @foreach ($teams as $team)
-                                                <option value="{{ $team['key'] }}"
-                                                    @if (isset($user->team_key) && $user->team_key == $team['key']) selected @endif>{{ $team['name'] }}
-                                                </option>
+                                            @foreach($teams as $team)
+                                                <option value="{{$team['key']}}" @if(isset($user->team_key) && $user->team_key == $team['key']) selected @endif>{{$team['name']}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -154,8 +129,8 @@
                             <div class="form-group  col-xl-4 col-md-6  col-sm-3 col-12">
                                 <label class="form-control-label font-weight-bold">@lang('Email Verification') </label>
                                 <input type="checkbox" data-width="100%" data-onstyle="-success" data-offstyle="-danger"
-                                    data-toggle="toggle" data-on="@lang('Verified')" data-off="@lang('Unverified')"
-                                    name="email_verified" @if ($user->emailVerified) checked @endif>
+                                       data-toggle="toggle" data-on="@lang('Verified')" data-off="@lang('Unverified')" name="email_verified"
+                                       @if($user->emailVerified) checked @endif>
 
                             </div>
                         </div>

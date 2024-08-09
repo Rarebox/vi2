@@ -32,21 +32,15 @@ final class DatePoint extends \DateTimeImmutable
 
             if (\PHP_VERSION_ID < 80300) {
                 try {
-                    $builtInDate = new parent($datetime, $timezone ?? $now->getTimezone());
-                    $timezone = $builtInDate->getTimezone();
+                    $timezone = (new parent($datetime, $timezone ?? $now->getTimezone()))->getTimezone();
                 } catch (\Exception $e) {
                     throw new \DateMalformedStringException($e->getMessage(), $e->getCode(), $e);
                 }
             } else {
-                $builtInDate = new parent($datetime, $timezone ?? $now->getTimezone());
-                $timezone = $builtInDate->getTimezone();
+                $timezone = (new parent($datetime, $timezone ?? $now->getTimezone()))->getTimezone();
             }
 
             $now = $now->setTimezone($timezone)->modify($datetime);
-
-            if ('00:00:00.000000' === $builtInDate->format('H:i:s.u')) {
-                $now = $now->setTime(0, 0);
-            }
         } elseif (null !== $timezone) {
             $now = $now->setTimezone($timezone);
         }
@@ -70,27 +64,6 @@ final class DatePoint extends \DateTimeImmutable
     public static function createFromMutable(\DateTime $object): static
     {
         return parent::createFromMutable($object);
-    }
-
-    public static function createFromTimestamp(int|float $timestamp): static
-    {
-        if (\PHP_VERSION_ID >= 80400) {
-            return parent::createFromTimestamp($timestamp);
-        }
-
-        if (\is_int($timestamp) || !$ms = (int) $timestamp - $timestamp) {
-            return static::createFromFormat('U', (string) $timestamp);
-        }
-
-        if (!is_finite($timestamp) || \PHP_INT_MAX + 1.0 <= $timestamp || \PHP_INT_MIN > $timestamp) {
-            throw new \DateRangeError(sprintf('DateTimeImmutable::createFromTimestamp(): Argument #1 ($timestamp) must be a finite number between %s and %s.999999, %s given', \PHP_INT_MIN, \PHP_INT_MAX, $timestamp));
-        }
-
-        if ($timestamp < 0) {
-            $timestamp = (int) $timestamp - 2.0 + $ms;
-        }
-
-        return static::createFromFormat('U.u', sprintf('%.6F', $timestamp));
     }
 
     public function add(\DateInterval $interval): static
@@ -143,27 +116,5 @@ final class DatePoint extends \DateTimeImmutable
     public function getTimezone(): \DateTimeZone
     {
         return parent::getTimezone() ?: throw new \DateInvalidTimeZoneException('The DatePoint object has no timezone.');
-    }
-
-    public function setMicrosecond(int $microsecond): static
-    {
-        if ($microsecond < 0 || $microsecond > 999999) {
-            throw new \DateRangeError('DatePoint::setMicrosecond(): Argument #1 ($microsecond) must be between 0 and 999999, '.$microsecond.' given');
-        }
-
-        if (\PHP_VERSION_ID < 80400) {
-            return $this->setTime(...explode('.', $this->format('H.i.s.'.$microsecond)));
-        }
-
-        return parent::setMicrosecond($microsecond);
-    }
-
-    public function getMicrosecond(): int
-    {
-        if (\PHP_VERSION_ID >= 80400) {
-            return parent::getMicrosecond();
-        }
-
-        return $this->format('u');
     }
 }

@@ -75,10 +75,10 @@ class Line implements IteratorAggregate, Countable
     /**
      * Set position of current line
      *
-     * @param PointInterface $point
+     * @param Point $point
      * @return Line
      */
-    public function setPosition(PointInterface $point): self
+    public function setPosition(Point $point): self
     {
         $this->position = $point;
 

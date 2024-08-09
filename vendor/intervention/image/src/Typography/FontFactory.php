@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Typography;
 
-use Closure;
 use Intervention\Image\Exceptions\FontException;
 use Intervention\Image\Interfaces\FontInterface;
 
@@ -15,11 +14,11 @@ class FontFactory
     /**
      * Create new instance
      *
-     * @param Closure|FontInterface $init
+     * @param callable|FontInterface $init
      * @throws FontException
      * @return void
      */
-    public function __construct(callable|Closure|FontInterface $init)
+    public function __construct(callable|FontInterface $init)
     {
         $this->font = is_a($init, FontInterface::class) ? $init : new Font();
 

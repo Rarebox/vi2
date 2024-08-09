@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Intervention\Image\Drivers\Gd;
 
 use Intervention\Image\Drivers\AbstractFontProcessor;
-use Intervention\Image\Geometry\Point;
 use Intervention\Image\Geometry\Rectangle;
 use Intervention\Image\Interfaces\FontInterface;
 use Intervention\Image\Interfaces\SizeInterface;
@@ -38,17 +37,16 @@ class FontProcessor extends AbstractFontProcessor
 
         // calculate box size from ttf font file with angle 0
         $box = imageftbbox(
-            size: $this->nativeFontSize($font),
-            angle: 0,
-            font_filename: $font->filename(),
-            string: $text
+            $this->nativeFontSize($font),
+            0,
+            $font->filename(),
+            $text
         );
 
         // build size from points
         return new Rectangle(
-            width: intval(abs($box[6] - $box[4])), // difference of upper-left-x and upper-right-x
-            height: intval(abs($box[7] - $box[1])), // difference if upper-left-y and lower-left-y
-            pivot: new Point($box[6], $box[7]), // position of upper-left corner
+            intval(abs($box[4] - $box[0])),
+            intval(abs($box[5] - $box[1]))
         );
     }
 

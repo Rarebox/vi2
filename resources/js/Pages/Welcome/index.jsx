@@ -3,7 +3,7 @@ import TextInput from '@/Components/TextInput';
 import axios from 'axios';
 import { useState } from 'react';
 import Authenticated from '@/Layouts/AuthenticatedLayout';
-// import Navbar from '@/Components/Navbar';
+import Navbar from '@/Components/Navbar';
 import Banner from "@/Components/Home/Banner";
 import About from "@/Components/Home/About";
 import ChooseUs from "@/Components/Home/ChooseUs";
@@ -11,7 +11,6 @@ import ChooseUs from "@/Components/Home/ChooseUs";
 import ContactUs from "@/Components/Home/ContactUs";
 import Footer from "@/Components/Footer";
 import Stepper from "@/Components/Home/Stepper";
-import Navbar from '../../../../resources/js/Components/NavBar/index'
 
 
 export default function Welcome({ auth, laravelVersion, phpVersion, employees }) {
@@ -32,17 +31,17 @@ export default function Welcome({ auth, laravelVersion, phpVersion, employees })
     const [employeess, setEmployees] = useState([]);
 
     // const searchEmployee = (search) => {
-    // setData('search', '');
-    // axios.get(`/employees/search?search= `).then((response) => {
-    //     response.data.data.map((employee) => {
-    //         console.log(employee);
-    //     });
-    //     setEmployees(response.data.data);
-    //     console.log(response.data.data);
-    //     employeess.map((employee) => {
-    //         console.log(employee);
-    //     });
-    // });
+        // setData('search', '');
+        // axios.get(`/employees/search?search= `).then((response) => {
+        //     response.data.data.map((employee) => {
+        //         console.log(employee);
+        //     });
+        //     setEmployees(response.data.data);
+        //     console.log(response.data.data);
+        //     employeess.map((employee) => {
+        //         console.log(employee);
+        //     });
+        // });
     // }
 
     return (

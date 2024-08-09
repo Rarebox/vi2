@@ -4,49 +4,26 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Geometry\Factories;
 
-use Closure;
 use Intervention\Image\Geometry\Point;
 use Intervention\Image\Geometry\Polygon;
-use Intervention\Image\Interfaces\DrawableFactoryInterface;
-use Intervention\Image\Interfaces\DrawableInterface;
 
-class PolygonFactory implements DrawableFactoryInterface
+class PolygonFactory
 {
     protected Polygon $polygon;
 
     /**
      * Create new factory instance
      *
-     * @param null|Closure|Polygon $init
+     * @param callable|Polygon $init
      * @return void
      */
-    public function __construct(null|Closure|Polygon $init = null)
+    public function __construct(callable|Polygon $init)
     {
         $this->polygon = is_a($init, Polygon::class) ? $init : new Polygon([]);
 
         if (is_callable($init)) {
             $init($this);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see DrawableFactoryInterface::init()
-     */
-    public static function init(null|Closure|DrawableInterface $init = null): self
-    {
-        return new self($init);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see DrawableFactoryInterface::create()
-     */
-    public function create(): DrawableInterface
-    {
-        return $this->polygon;
     }
 
     /**

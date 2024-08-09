@@ -7,7 +7,6 @@ namespace Intervention\Image\Drivers\Gd\Decoders;
 use Intervention\Image\Drivers\SpecializableDecoder;
 use Intervention\Image\Exceptions\DecoderException;
 use Intervention\Image\Interfaces\SpecializedInterface;
-use Intervention\Image\MediaType;
 
 abstract class AbstractDecoder extends SpecializableDecoder implements SpecializedInterface
 {
@@ -16,21 +15,21 @@ abstract class AbstractDecoder extends SpecializableDecoder implements Specializ
      *
      * @param string $filepath
      * @throws DecoderException
-     * @return MediaType
+     * @return string
      */
-    protected function getMediaTypeByFilePath(string $filepath): MediaType
+    protected function getMediaTypeByFilePath(string $filepath): string
     {
         $info = @getimagesize($filepath);
 
         if (!is_array($info)) {
-            throw new DecoderException('Unable to detect media (MIME) from data in file path.');
+            throw new DecoderException('Unable to decode input');
         }
 
         if (!array_key_exists('mime', $info)) {
-            throw new DecoderException('Unable to detect media (MIME) from data in file path.');
+            throw new DecoderException('Unable to decode input');
         }
 
-        return MediaType::from($info['mime']);
+        return $info['mime'];
     }
 
     /**
@@ -38,20 +37,20 @@ abstract class AbstractDecoder extends SpecializableDecoder implements Specializ
      *
      * @param string $data
      * @throws DecoderException
-     * @return MediaType
+     * @return string
      */
-    protected function getMediaTypeByBinary(string $data): MediaType
+    protected function getMediaTypeByBinary(string $data): string
     {
         $info = @getimagesizefromstring($data);
 
         if (!is_array($info)) {
-            throw new DecoderException('Unable to detect media (MIME) from binary data.');
+            throw new DecoderException('Unable to decode input');
         }
 
         if (!array_key_exists('mime', $info)) {
-            throw new DecoderException('Unable to detect media (MIME) from binary data.');
+            throw new DecoderException('Unable to decode input');
         }
 
-        return MediaType::from($info['mime']);
+        return $info['mime'];
     }
 }

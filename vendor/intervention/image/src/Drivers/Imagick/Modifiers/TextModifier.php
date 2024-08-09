@@ -15,7 +15,6 @@ use Intervention\Image\Geometry\Point;
 use Intervention\Image\Interfaces\FontInterface;
 use Intervention\Image\Interfaces\FrameInterface;
 use Intervention\Image\Interfaces\ImageInterface;
-use Intervention\Image\Interfaces\PointInterface;
 use Intervention\Image\Interfaces\SpecializedInterface;
 use Intervention\Image\Modifiers\TextModifier as GenericTextModifier;
 use Intervention\Image\Typography\Line;
@@ -113,14 +112,14 @@ class TextModifier extends GenericTextModifier implements SpecializedInterface
      * @param FrameInterface $frame
      * @param Line $textline
      * @param null|ImagickDraw $draw
-     * @param PointInterface $offset
+     * @param Point $offset
      * @return void
      */
     private function maybeDrawTextline(
         FrameInterface $frame,
         Line $textline,
         ?ImagickDraw $draw = null,
-        PointInterface $offset = new Point(),
+        Point $offset = new Point(),
     ): void {
         if ($draw !== null) {
             $frame->native()->annotateImage(

@@ -27,7 +27,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\Depends;
@@ -71,7 +70,6 @@ use PHPUnit\Framework\Attributes\Ticket;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesFunction;
 use PHPUnit\Framework\Attributes\UsesMethod;
-use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Metadata\Metadata;
 use PHPUnit\Metadata\MetadataCollection;
@@ -80,14 +78,12 @@ use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final readonly class AttributeParser implements Parser
 {
     /**
-     * @param class-string $className
+     * @psalm-param class-string $className
      */
     public function forClass(string $className): MetadataCollection
     {
@@ -119,13 +115,6 @@ final readonly class AttributeParser implements Parser
                     assert($attributeInstance instanceof CoversClass);
 
                     $result[] = Metadata::coversClass($attributeInstance->className());
-
-                    break;
-
-                case CoversTrait::class:
-                    assert($attributeInstance instanceof CoversTrait);
-
-                    $result[] = Metadata::coversTrait($attributeInstance->traitName());
 
                     break;
 
@@ -334,13 +323,6 @@ final readonly class AttributeParser implements Parser
 
                     break;
 
-                case UsesTrait::class:
-                    assert($attributeInstance instanceof UsesTrait);
-
-                    $result[] = Metadata::usesTrait($attributeInstance->traitName());
-
-                    break;
-
                 case UsesFunction::class:
                     assert($attributeInstance instanceof UsesFunction);
 
@@ -364,8 +346,8 @@ final readonly class AttributeParser implements Parser
     }
 
     /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
+     * @psalm-param non-empty-string $methodName
      */
     public function forMethod(string $className, string $methodName): MetadataCollection
     {
@@ -380,16 +362,12 @@ final readonly class AttributeParser implements Parser
 
             switch ($attribute->getName()) {
                 case After::class:
-                    assert($attributeInstance instanceof After);
-
-                    $result[] = Metadata::after($attributeInstance->priority());
+                    $result[] = Metadata::after();
 
                     break;
 
                 case AfterClass::class:
-                    assert($attributeInstance instanceof AfterClass);
-
-                    $result[] = Metadata::afterClass($attributeInstance->priority());
+                    $result[] = Metadata::afterClass();
 
                     break;
 
@@ -408,16 +386,12 @@ final readonly class AttributeParser implements Parser
                     break;
 
                 case Before::class:
-                    assert($attributeInstance instanceof Before);
-
-                    $result[] = Metadata::before($attributeInstance->priority());
+                    $result[] = Metadata::before();
 
                     break;
 
                 case BeforeClass::class:
-                    assert($attributeInstance instanceof BeforeClass);
-
-                    $result[] = Metadata::beforeClass($attributeInstance->priority());
+                    $result[] = Metadata::beforeClass();
 
                     break;
 
@@ -551,16 +525,12 @@ final readonly class AttributeParser implements Parser
                     break;
 
                 case PostCondition::class:
-                    assert($attributeInstance instanceof PostCondition);
-
-                    $result[] = Metadata::postCondition($attributeInstance->priority());
+                    $result[] = Metadata::postCondition();
 
                     break;
 
                 case PreCondition::class:
-                    assert($attributeInstance instanceof PreCondition);
-
-                    $result[] = Metadata::preCondition($attributeInstance->priority());
+                    $result[] = Metadata::preCondition();
 
                     break;
 
@@ -705,8 +675,8 @@ final readonly class AttributeParser implements Parser
     }
 
     /**
-     * @param class-string     $className
-     * @param non-empty-string $methodName
+     * @psalm-param class-string $className
+     * @psalm-param non-empty-string $methodName
      */
     public function forClassAndMethod(string $className, string $methodName): MetadataCollection
     {

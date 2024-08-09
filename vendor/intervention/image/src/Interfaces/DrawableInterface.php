@@ -14,14 +14,6 @@ interface DrawableInterface
     public function position(): PointInterface;
 
     /**
-     * Set position of the drawable object
-     *
-     * @param PointInterface $position
-     * @return DrawableInterface
-     */
-    public function setPosition(PointInterface $position): self;
-
-    /**
      * Set the background color of the drawable object
      *
      * @param mixed $color

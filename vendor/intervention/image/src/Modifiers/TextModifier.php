@@ -10,13 +10,12 @@ use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\Geometry\Point;
 use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\FontInterface;
-use Intervention\Image\Interfaces\PointInterface;
 
 class TextModifier extends SpecializableModifier
 {
     public function __construct(
         public string $text,
-        public PointInterface $position,
+        public Point $position,
         public FontInterface $font
     ) {
     }
@@ -70,7 +69,7 @@ class TextModifier extends SpecializableModifier
      * Return array of offset points to draw text stroke effect below the actual text
      *
      * @param FontInterface $font
-     * @return array<PointInterface>
+     * @return array<Point>
      */
     protected function strokeOffsets(FontInterface $font): array
     {

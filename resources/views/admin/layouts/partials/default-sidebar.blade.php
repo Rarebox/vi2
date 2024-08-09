@@ -9,8 +9,7 @@
         <div class="sidebar-nav-wrapper">
             <!-- Sidebar Menu -->
             <nav class="sidebar-main-nav mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu"
-                    data-accordion="false">
+                <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                     <x-admin.sidebar-list :linkActive="Route::is('admin.dashboard') ? true : false" route="admin.dashboard" parameter=""
                         icon="fas fa-tachometer-alt">
                         {{ __('dashboard') }}
@@ -36,22 +35,13 @@
                             {{ __('candidate') }}
                         </x-admin.sidebar-list>
                     @endif
-                    @if (userCan('job.view') ||
-                            userCan('job_category.view') ||
-                            userCan('job_role.view') ||
-                            userCan('plan.view') ||
-                            userCan('industry_types.view') ||
-                            userCan('professions.view'))
+                    @if (userCan('job.view') || userCan('job_category.view') || userCan('job_role.view') || userCan('plan.view') || userCan('industry_types.view') || userCan('professions.view'))
                         <li class="nav-header text-uppercase">{{ __('manage_jobs') }}</li>
                     @endif
 
                     <!-- ======= Job ======== -->
                     @if (userCan('job.view'))
-                        <x-admin.sidebar-list :linkActive="Request::is('admin/job/*') ||
-                        Request::is('admin/job') ||
-                        request()->routeIs('admin.job.edited.*')
-                            ? true
-                            : false" route="job.index" icon="fas fa-briefcase">
+                        <x-admin.sidebar-list :linkActive="Request::is('admin/job/*') || Request::is('admin/job') || request()->routeIs('admin.job.edited.*') ? true : false" route="job.index" icon="fas fa-briefcase">
                             {{ __('jobs') }}
                         </x-admin.sidebar-list>
                     @endif
@@ -78,18 +68,9 @@
                         </x-admin.sidebar-list>
                     @endif
                     @if (userCan('industry_types.view') || userCan('professions.view'))
-                        <x-admin.sidebar-dropdown :linkActive="Request::is('admin/industryType*') ||
-                        Request::is('admin/profession*') ||
-                        Request::is('skill.*') ||
-                        request()->routeIs('benefit.*') ||
-                        request()->routeIs('admin.candidate.language.*') ||
-                        Request::is('admin/skill*')
+                        <x-admin.sidebar-dropdown :linkActive="Request::is('admin/industryType*') || Request::is('admin/profession*') || Request::is('skill.*') || request()->routeIs('benefit.*') ||  request()->routeIs('admin.candidate.language.*') || Request::is('admin/skill*')
                             ? true
-                            : false" :subLinkActive="Request::is('admin/industryType*') ||
-                        Request::is('admin/profession*') ||
-                        request()->routeIs('benefit.*') ||
-                        request()->routeIs('admin.candidate.language.*') ||
-                        Request::is('admin/skill*')
+                            : false" :subLinkActive="Request::is('admin/industryType*') || Request::is('admin/profession*') || request()->routeIs('benefit.*') ||  request()->routeIs('admin.candidate.language.*') || Request::is('admin/skill*')
                             ? true
                             : false" icon="fas fa-users-cog">
                             @slot('title')
@@ -114,11 +95,12 @@
 
                                 <!-- ======= skills ======== -->
                                 @if (userCan('skills.view'))
-                                    <x-admin.sidebar-list :linkActive="request()->routeIs('skill.*') ? true : false" route="skill.index" icon="fas fa-cog">
+                                    <x-admin.sidebar-list :linkActive="request()->routeIs('skill.*') ? true : false" route="skill.index"
+                                        icon="fas fa-cog">
                                         {{ __('skills') }}
                                     </x-admin.sidebar-list>
                                 @endif
-                                <!-- ======= skills ======== -->
+                                 <!-- ======= skills ======== -->
                                 @if (userCan('benefits.view'))
                                     <x-admin.sidebar-list :linkActive="request()->routeIs('benefit.*') ? true : false" route="benefit.index"
                                         icon="fas fa-bullseye">
@@ -136,15 +118,7 @@
                         </x-admin.sidebar-dropdown>
                     @endif
 
-                    @if (userCan('post.view') ||
-                            userCan('country.view') ||
-                            userCan('state.view') ||
-                            userCan('city.view') ||
-                            userCan('newsletter.view') ||
-                            userCan('newsletter.sendmail') ||
-                            userCan('contact.view') ||
-                            userCan('testimonial.view') ||
-                            userCan('admin.view'))
+                    @if (userCan('post.view') || userCan('country.view') || userCan('state.view') || userCan('city.view') || userCan('newsletter.view') || userCan('newsletter.sendmail') || userCan('contact.view') || userCan('testimonial.view') || userCan('admin.view'))
                         <li class="nav-header text-uppercase">{{ __('others') }}</li>
                     @endif
                     <!-- ======== Blog ====== -->

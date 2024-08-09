@@ -55,7 +55,6 @@ class DrawEllipseModifier extends GenericDrawEllipseModifier implements Speciali
                 );
             } else {
                 imagealphablending($frame->native(), true);
-                imagesetthickness($frame->native(), 0);
                 imagefilledellipse(
                     $frame->native(),
                     $this->drawable()->position()->x(),

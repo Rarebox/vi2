@@ -19,7 +19,6 @@ class DrawPolygonModifier extends ModifiersDrawPolygonModifier implements Specia
         foreach ($image as $frame) {
             if ($this->drawable->hasBackgroundColor()) {
                 imagealphablending($frame->native(), true);
-                imagesetthickness($frame->native(), 0);
                 imagefilledpolygon(
                     $frame->native(),
                     $this->drawable->toArray(),

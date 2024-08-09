@@ -17,16 +17,23 @@ use PHPUnit\Framework\MockObject\Builder\InvocationMocker as InvocationMockerBui
 use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This trait is not covered by the backward compatibility promise for PHPUnit
  */
 trait MockObjectApi
 {
+    private static array $__phpunit_deprecation_emitted_for_test = [];
+    private object $__phpunit_originalObject;
+
     /** @noinspection MagicMethodsValidityInspection */
     public function __phpunit_hasMatchers(): bool
     {
         return $this->__phpunit_getInvocationHandler()->hasMatchers();
+    }
+
+    /** @noinspection MagicMethodsValidityInspection */
+    public function __phpunit_setOriginalObject(object $originalObject): void
+    {
+        $this->__phpunit_originalObject = $originalObject;
     }
 
     /** @noinspection MagicMethodsValidityInspection */
@@ -38,8 +45,6 @@ trait MockObjectApi
             $this->__phpunit_unsetInvocationMocker();
         }
     }
-
-    abstract public function __phpunit_state(): TestDoubleState;
 
     abstract public function __phpunit_getInvocationHandler(): InvocationHandler;
 
@@ -55,18 +60,16 @@ trait MockObjectApi
             try {
                 $test = TestMethodBuilder::fromCallStack();
 
-                if (!$this->__phpunit_state()->wasDeprecationAlreadyEmittedFor($test->id())) {
+                if (!isset(self::$__phpunit_deprecation_emitted_for_test[$test->id()])) {
                     EventFacade::emitter()->testTriggeredPhpunitDeprecation(
                         $test,
                         $message,
                     );
 
-                    $this->__phpunit_state()->deprecationWasEmittedFor($test->id());
+                    self::$__phpunit_deprecation_emitted_for_test[$test->id()] = true;
                 }
-                // @codeCoverageIgnoreStart
             } catch (NoTestCaseObjectOnCallStackException) {
                 EventFacade::emitter()->testRunnerTriggeredDeprecation($message);
-                // @codeCoverageIgnoreEnd
             }
         }
 

@@ -17,14 +17,14 @@ class Line implements DrawableInterface
     /**
      * Create new line instance
      *
-     * @param PointInterface $start
-     * @param PointInterface $end
+     * @param Point $start
+     * @param Point $end
      * @param int $width
      * @return void
      */
     public function __construct(
-        protected PointInterface $start,
-        protected PointInterface $end,
+        protected Point $start,
+        protected Point $end,
         protected int $width = 1
     ) {
     }
@@ -37,18 +37,6 @@ class Line implements DrawableInterface
     public function position(): PointInterface
     {
         return $this->start;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see DrawableInterface::setPosition()
-     */
-    public function setPosition(PointInterface $position): DrawableInterface
-    {
-        $this->start = $position;
-
-        return $this;
     }
 
     /**
@@ -77,9 +65,9 @@ class Line implements DrawableInterface
     /**
      * Get starting point of line
      *
-     * @return PointInterface
+     * @return Point
      */
-    public function start(): PointInterface
+    public function start(): Point
     {
         return $this->start;
     }
@@ -87,9 +75,9 @@ class Line implements DrawableInterface
     /**
      * get end point of line
      *
-     * @return PointInterface
+     * @return Point
      */
-    public function end(): PointInterface
+    public function end(): Point
     {
         return $this->end;
     }
@@ -97,10 +85,10 @@ class Line implements DrawableInterface
     /**
      * Set starting point of line
      *
-     * @param PointInterface $start
+     * @param Point $start
      * @return Line
      */
-    public function setStart(PointInterface $start): self
+    public function setStart(Point $start): self
     {
         $this->start = $start;
 
@@ -140,10 +128,10 @@ class Line implements DrawableInterface
     /**
      * Set end point of line
      *
-     * @param PointInterface $end
+     * @param Point $end
      * @return Line
      */
-    public function setEnd(PointInterface $end): self
+    public function setEnd(Point $end): self
     {
         $this->end = $end;
 

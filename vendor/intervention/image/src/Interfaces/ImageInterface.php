@@ -4,18 +4,11 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Interfaces;
 
-use Closure;
 use Countable;
 use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\Exceptions\AnimationException;
 use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\FileExtension;
-use Intervention\Image\Geometry\Bezier;
-use Intervention\Image\Geometry\Circle;
-use Intervention\Image\Geometry\Ellipse;
-use Intervention\Image\Geometry\Line;
-use Intervention\Image\Geometry\Polygon;
-use Intervention\Image\Geometry\Rectangle;
 use Intervention\Image\MediaType;
 use Intervention\Image\Origin;
 use IteratorAggregate;
@@ -254,8 +247,7 @@ interface ImageInterface extends IteratorAggregate, Countable
      * Return color that is mixed with transparent areas when converting to a format which
      * does not support transparency.
      *
-     * @deprecated Use configuration options of image manager instead
-     * @throws RuntimeException
+     * @link https://image.intervention.io/v3/basics/colors#transparency
      * @return ColorInterface
      */
     public function blendingColor(): ColorInterface;
@@ -264,7 +256,7 @@ interface ImageInterface extends IteratorAggregate, Countable
      * Set blending color will have no effect unless image is converted into a format
      * which does not support transparency.
      *
-     * @deprecated Use configuration options of image manager instead
+     * @link https://image.intervention.io/v3/basics/colors#transparency
      * @param mixed $color
      * @throws RuntimeException
      * @return ImageInterface
@@ -439,26 +431,17 @@ interface ImageInterface extends IteratorAggregate, Countable
     public function rotate(float $angle, mixed $background = 'ffffff'): self;
 
     /**
-     * Rotate the image to be upright according to exif information
-     *
-     * @link https://image.intervention.io/v3/modifying/effects#image-orientation-according-to-exif-data
-     * @throws RuntimeException
-     * @return ImageInterface
-     */
-    public function orient(): self;
-
-    /**
      * Draw text on image
      *
-     * @link https://image.intervention.io/v3/modifying/text-fonts
+     * @ink https://image.intervention.io/v3/modifying/text-fonts
      * @param string $text
      * @param int $x
      * @param int $y
-     * @param callable|Closure|FontInterface $font
+     * @param callable|FontInterface $font
      * @throws RuntimeException
      * @return ImageInterface
      */
-    public function text(string $text, int $x, int $y, callable|Closure|FontInterface $font): self;
+    public function text(string $text, int $x, int $y, callable|FontInterface $font): self;
 
     /**
      * Resize image to the given width and/or height
@@ -706,11 +689,11 @@ interface ImageInterface extends IteratorAggregate, Countable
      * @link https://image.intervention.io/v3/modifying/drawing#drawing-a-rectangle
      * @param int $x
      * @param int $y
-     * @param callable|Closure|Rectangle $init
+     * @param callable $init
      * @throws RuntimeException
      * @return ImageInterface
      */
-    public function drawRectangle(int $x, int $y, callable|Closure|Rectangle $init): self;
+    public function drawRectangle(int $x, int $y, callable $init): self;
 
     /**
      * Draw ellipse on the current image
@@ -718,11 +701,11 @@ interface ImageInterface extends IteratorAggregate, Countable
      * @link https://image.intervention.io/v3/modifying/drawing#drawing-ellipses
      * @param int $x
      * @param int $y
-     * @param callable|Closure|Ellipse $init
+     * @param callable $init
      * @throws RuntimeException
      * @return ImageInterface
      */
-    public function drawEllipse(int $x, int $y, callable|Closure|Ellipse $init): self;
+    public function drawEllipse(int $x, int $y, callable $init): self;
 
     /**
      * Draw circle on the current image
@@ -730,41 +713,31 @@ interface ImageInterface extends IteratorAggregate, Countable
      * @link https://image.intervention.io/v3/modifying/drawing#drawing-a-circle
      * @param int $x
      * @param int $y
-     * @param callable|Closure|Circle $init
+     * @param callable $init
      * @throws RuntimeException
      * @return ImageInterface
      */
-    public function drawCircle(int $x, int $y, callable|Closure|Circle $init): self;
+    public function drawCircle(int $x, int $y, callable $init): self;
 
     /**
      * Draw a polygon on the current image
      *
      * @link https://image.intervention.io/v3/modifying/drawing#drawing-a-polygon
-     * @param callable|Closure|Polygon $init
+     * @param callable $init
      * @throws RuntimeException
      * @return ImageInterface
      */
-    public function drawPolygon(callable|Closure|Polygon $init): self;
+    public function drawPolygon(callable $init): self;
 
     /**
      * Draw a line on the current image
      *
      * @link https://image.intervention.io/v3/modifying/drawing#drawing-a-line
-     * @param callable|Closure|Line $init
+     * @param callable $init
      * @throws RuntimeException
      * @return ImageInterface
      */
-    public function drawLine(callable|Closure|Line $init): self;
-
-    /**
-     * Draw a bezier curve on the current image
-     *
-     * @link https://image.intervention.io/v3/modifying/drawing#draw-bezier-curves
-     * @param callable|Closure|Bezier $init
-     * @throws RuntimeException
-     * @return ImageInterface
-     */
-    public function drawBezier(callable|Closure|Bezier $init): self;
+    public function drawLine(callable $init): self;
 
     /**
      * Encode image to given media (mime) type. If no type is given the image

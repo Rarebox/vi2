@@ -40,15 +40,12 @@ class Origin
     /**
      * Set media type of current instance
      *
-     * @param string|MediaType $type
+     * @param string $type
      * @return Origin
      */
-    public function setMediaType(string|MediaType $type): self
+    public function setMediaType(string $type): self
     {
-        $this->mediaType = match (true) {
-            is_string($type) => $type,
-            default => $type->value,
-        };
+        $this->mediaType = $type;
 
         return $this;
     }

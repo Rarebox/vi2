@@ -13,6 +13,7 @@ use Intervention\Image\Exceptions\RuntimeException;
 use Intervention\Image\Format;
 use Intervention\Image\FileExtension;
 use Intervention\Image\Image;
+use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\ColorProcessorInterface;
 use Intervention\Image\Interfaces\ColorspaceInterface;
 use Intervention\Image\Interfaces\DriverInterface;
@@ -70,7 +71,6 @@ class Driver extends AbstractDriver
     /**
      * {@inheritdoc}
      *
-     * @throws RuntimeException
      * @see DriverInterface::createAnimation()
      */
     public function createAnimation(callable $init): ImageInterface
@@ -119,6 +119,16 @@ class Driver extends AbstractDriver
     /**
      * {@inheritdoc}
      *
+     * @see DriverInterface::handleInput()
+     */
+    public function handleInput(mixed $input, array $decoders = []): ImageInterface|ColorInterface
+    {
+        return (new InputHandler($this->specializeMultiple($decoders)))->handle($input);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @see DriverInterface::colorProcessor()
      */
     public function colorProcessor(ColorspaceInterface $colorspace): ColorProcessorInterface
@@ -136,11 +146,6 @@ class Driver extends AbstractDriver
         return new FontProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @see DriverInterface::supports()
-     */
     public function supports(string|Format|FileExtension|MediaType $identifier): bool
     {
         try {

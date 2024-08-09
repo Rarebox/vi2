@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Intervention\Image\Drivers;
 
-use Intervention\Image\Config;
 use Intervention\Image\Exceptions\DriverException;
 use Intervention\Image\Exceptions\NotSupportedException;
-use Intervention\Image\InputHandler;
 use Intervention\Image\Interfaces\AnalyzerInterface;
-use Intervention\Image\Interfaces\ColorInterface;
 use Intervention\Image\Interfaces\DecoderInterface;
 use Intervention\Image\Interfaces\DriverInterface;
 use Intervention\Image\Interfaces\EncoderInterface;
-use Intervention\Image\Interfaces\ImageInterface;
 use Intervention\Image\Interfaces\ModifierInterface;
 use Intervention\Image\Interfaces\SpecializableInterface;
 use Intervention\Image\Interfaces\SpecializedInterface;
@@ -22,38 +18,11 @@ use ReflectionClass;
 abstract class AbstractDriver implements DriverInterface
 {
     /**
-     * Driver options
-     */
-    protected Config $config;
-
-    /**
      * @throws DriverException
-     * @return void
      */
     public function __construct()
     {
-        $this->config = new Config();
         $this->checkHealth();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see DriverInterface::config()
-     */
-    public function config(): Config
-    {
-        return $this->config;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @see DriverInterface::handleInput()
-     */
-    public function handleInput(mixed $input, array $decoders = []): ImageInterface|ColorInterface
-    {
-        return InputHandler::withDecoders($decoders, $this)->handle($input);
     }
 
     /**
@@ -69,10 +38,8 @@ abstract class AbstractDriver implements DriverInterface
             return $object;
         }
 
-        // return directly and only attach driver if object is already specialized
-        if (($object instanceof SpecializedInterface)) {
-            $object->setDriver($this);
-
+        // return directly if object is already specialized
+        if ($object instanceof SpecializedInterface) {
             return $object;
         }
 
@@ -87,7 +54,7 @@ abstract class AbstractDriver implements DriverInterface
             );
         }
 
-        // create a driver specialized object with the specializable properties of generic object
+        // create driver specialized object with specializable properties of generic object
         $specialized = (new $specialized_classname(...$object->specializable()));
 
         // attach driver
@@ -97,8 +64,6 @@ abstract class AbstractDriver implements DriverInterface
     /**
      * {@inheritdoc}
      *
-     * @throws NotSupportedException
-     * @throws DriverException
      * @see DriverInterface::specializeMultiple()
      */
     public function specializeMultiple(array $objects): array
